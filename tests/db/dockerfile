@@ -1,0 +1,8 @@
+FROM postgres:alpine
+
+WORKDIR /usr/app/db
+
+#COPY DDL.sql /docker-entrypoint-initdb.d/
+#COPY DML.sql /docker-entrypoint-initdb.d/
+
+EXPOSE 5432

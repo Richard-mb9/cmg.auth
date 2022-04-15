@@ -1,0 +1,19 @@
+{
+  "name": "cmg.auth",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.py",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "pytest --cov=./src --cov-report=html",
+    "redoc": "redoc-cli bundle swagger.yaml"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "redoc-cli": "^0.13.10"
+  }
+}

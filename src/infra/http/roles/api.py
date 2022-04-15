@@ -4,7 +4,7 @@ from json import dumps, loads
 from http import HTTPStatus
 from flask import jsonify
 
-from ....domain.services.roles_service import RolesService
+from src.domain.services.roles_service import RolesService
 
 service = RolesService()
 

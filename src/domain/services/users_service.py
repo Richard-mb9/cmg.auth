@@ -6,13 +6,13 @@ from flask import Response
 from src.utils.errors import ConflictError,BadRequestError
 
 from src.domain.models.users import Users
-from src.domain.models.roles import Roles
+from src.domain.models.groups import Groups
 
 from src.utils.validator import validator
 
 from src.infra.http.users.validators import insert_user_validator
 from src.infra.http.users.validators import update_password_validator
-from src.infra.http.users.validators import assign_to_rules_validator
+from src.infra.http.users.validators import assign_to_groups_validator
 
 
 class UserService:
@@ -59,21 +59,21 @@ class UserService:
         return user.password == self.__encode_md5(password)
 
 
-    def assign_to_roles(self, user_id, data):
-        """must receive a list of role ids, and associate them with the user"""
-        validator(assign_to_rules_validator, data)
-        roles_ids = data['roles_ids']
+    def assign_to_groups(self, user_id, data):
+        """must receive a list of group ids, and associate them with the user"""
+        validator(assign_to_groups_validator, data)
+        groups_ids = data['groups_ids']
         user: Users = self.read_by_id(user_id)
-        roles = Roles().read_by_id_in(roles_ids)
-        user.add_roles(roles)
+        groups = Groups().read_by_id_in(groups_ids)
+        user.add_groups(groups)
         return Response(status=HTTPStatus.NO_CONTENT)
 
 
-    def unassign_to_roles(self, user_id, data):
-        """must receive a list of role ids, and remove to user"""
-        validator(assign_to_rules_validator, data)
-        roles_ids = data['roles_ids']
+    def unassign_to_groups(self, user_id, data):
+        """must receive a list of group ids, and remove to user"""
+        validator(assign_to_groups_validator, data)
+        groups_ids = data['groups_ids']
         user: Users = self.read_by_id(user_id)
-        roles = Roles().read_by_id_in(roles_ids)
-        user.remove_roles(roles)
+        groups = Groups().read_by_id_in(groups_ids)
+        user.remove_groups(groups)
         return Response(status=HTTPStatus.NO_CONTENT)

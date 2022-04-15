@@ -4,11 +4,10 @@ from config import Base, get_session
 from sqlalchemy import Column, Integer, String, ForeignKey, Table
 from sqlalchemy.orm import relationship
 
-#session = get_session()
 
-users_roles = Table('users_roles', Base.metadata,
+users_groups = Table('users_groups', Base.metadata,
     Column('user_id', Integer,ForeignKey('users.id')),
-    Column('role_id', Integer,ForeignKey('roles.id'))
+    Column('group_id', Integer,ForeignKey('groups.id'))
 )
 
 class Users(Base ,BaseModel):
@@ -16,22 +15,22 @@ class Users(Base ,BaseModel):
 
     email = Column(String)
     password = Column(String)
-    roles = relationship('Roles', secondary=users_roles)
+    groups = relationship('Groups', secondary=users_groups)
 
 
-    def add_roles(self, roles: list):
+    def add_groups(self, groups: list):
         session = get_session()
-        for role in roles:
-            self.roles.append(role)
+        for group in groups:
+            self.groups.append(group)
         session.commit()
 
-    def remove_roles(self, roles: list):
+    def remove_groups(self, groups: list):
         session = get_session()
-        new_roles = []
-        for role in self.roles:
-            if role not in roles:
-                new_roles.append(role)
-        self.roles = new_roles
+        new_groups = []
+        for group in self.groups:
+            if group not in groups:
+                new_groups.append(group)
+        self.groups = new_groups
         session.commit()
 
     def update_password(self, password):

@@ -29,8 +29,8 @@ insert_rule_validator = {
     },
 }
 
-assign_to_rules_validator = {
-    'roles_ids': {
+assign_to_groups_validator = {
+    'groups_ids': {
         'type': 'list',
         'schema': {
             'type': 'number'

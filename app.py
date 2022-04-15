@@ -1,19 +1,21 @@
 from flask import Flask
 from flask_cors import CORS
 
-from src.infra.http.users.api import app as users_app
-from src.infra.http.roles.api import app as roles_app
+from src.infra.http.routes import create_routes
+
 from config import Base, get_engine
 
 def create_app(testing = False):
     app = Flask(__name__)
     CORS(app)
     
-    app.register_blueprint(users_app, url_prefix='/users')
-    app.register_blueprint(roles_app, url_prefix='/roles')
+    create_routes(app)
+
     app.config['testing'] = testing
+
     if testing:
         Base.metadata.create_all(bind=get_engine(testing))
+
     return app
 
 app = create_app()

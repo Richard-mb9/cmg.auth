@@ -5,10 +5,9 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Flask",
+            "name": "App",
             "type": "python",
             "request": "launch",
-            //"module": "flask",
             "program": "${workspaceFolder}/app.py",
             "env": {
                 "FLASK_APP": "app.py",

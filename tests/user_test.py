@@ -4,7 +4,7 @@ from json import dumps, loads
 from flask.testing import FlaskClient
 
 from src.domain.models.users import Users
-from src.domain.models.roles import Roles
+from src.domain.models.groups import Groups
 
 
 def test_get_ping_users_api(client: FlaskClient):
@@ -62,53 +62,53 @@ def test_update_password(client: FlaskClient):
     assert response.status_code == HTTPStatus.NO_CONTENT
 
 
-def test_fail_assign_role_with_invalid_parameters(client: FlaskClient):
+def test_fail_assign_group_with_invalid_parameters(client: FlaskClient):
     data = dumps({'invalid': [1]})
-    response = client.post(f'/users/1/roles/assign', data=data)
+    response = client.post(f'/users/1/groups/assign', data=data)
 
     assert response.status_code == HTTPStatus.BAD_REQUEST
 
 
-def test_assign_role_in_user(client: FlaskClient, users, roles):
+def test_assign_group_in_user(client: FlaskClient, users, groups):
     users_in_db = Users().list()
-    roles_in_db = Roles().list()
+    groups_in_db = Groups().list()
 
     user_id = users_in_db[0].id
-    role_id = roles_in_db[0].id
+    group_id = groups_in_db[0].id
 
-    data = dumps({'roles_ids': [role_id]})
-    response = client.post(f'/users/{user_id}/roles/assign', data=data)
+    data = dumps({'groups_ids': [group_id]})
+    response = client.post(f'/users/{user_id}/groups/assign', data=data)
 
     assert response.status_code == HTTPStatus.NO_CONTENT
 
     user = Users().read_by_id(user_id)
-    roles_in_user = user.roles
-    assert len(roles_in_user) == 1
-    assert roles_in_user[0].id == role_id
+    groups_in_user = user.groups
+    assert len(groups_in_user) == 1
+    assert groups_in_user[0].id == group_id
 
 
-def test_fail_unassign_role_with_invalid_parameters(client: FlaskClient):
+def test_fail_unassign_group_with_invalid_parameters(client: FlaskClient):
     data = dumps({'invalid': [1]})
-    response = client.post(f'/users/1/roles/unassign', data=data)
+    response = client.post(f'/users/1/groups/unassign', data=data)
 
     assert response.status_code == HTTPStatus.BAD_REQUEST
 
 
-def test_unassign_role_in_user(client: FlaskClient, users, roles):
+def test_unassign_group_in_user(client: FlaskClient, users, groups):
     users_in_db = Users().list()
-    roles_in_db = Roles().list()
+    groups_in_db = Groups().list()
 
     user_id = users_in_db[0].id
-    role_id1 = roles_in_db[0].id
-    role_id2 = roles_in_db[1].id
-    data = dumps({'roles_ids': [role_id1, role_id2]})
-    client.post(f'/users/{user_id}/roles/assign', data=data)
+    group_id1 = groups_in_db[0].id
+    group_id2 = groups_in_db[1].id
+    data = dumps({'groups_ids': [group_id1, group_id2]})
+    client.post(f'/users/{user_id}/groups/assign', data=data)
 
-    data = dumps({'roles_ids': [role_id1]})
-    response = client.post(f'/users/{user_id}/roles/unassign', data=data)
+    data = dumps({'groups_ids': [group_id1]})
+    response = client.post(f'/users/{user_id}/groups/unassign', data=data)
     assert response.status_code == HTTPStatus.NO_CONTENT
 
     user = Users().read_by_id(user_id)
-    roles_in_user = user.roles
-    assert len(roles_in_user) == 1
-    assert roles_in_user[0].id == role_id2
+    groups_in_user = user.groups
+    assert len(groups_in_user) == 1
+    assert groups_in_user[0].id == group_id2

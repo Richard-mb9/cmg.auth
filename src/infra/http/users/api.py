@@ -26,14 +26,14 @@ def update_password(user_id):
     return service.update_password(user_id ,data)
 
 
-@app.route('/<user_id>/roles/assign', methods=['POST'])
-def assign_to_roles(user_id):
+@app.route('/<user_id>/groups/assign', methods=['POST'])
+def assign_to_groups(user_id):
     data = loads(request.data)
-    return service.assign_to_roles(user_id ,data)
+    return service.assign_to_groups(user_id ,data)
 
 
-@app.route('/<user_id>/roles/unassign', methods=['POST'])
-def unassign_to_roles(user_id):
+@app.route('/<user_id>/groups/unassign', methods=['POST'])
+def unassign_to_groups(user_id):
     data = loads(request.data)
-    return service.unassign_to_roles(user_id ,data)
+    return service.unassign_to_groups(user_id ,data)
 

@@ -10,6 +10,7 @@ jobs:
     name: deploy
     runs-on: ubuntu-latest
     env:
+      REGION: ${{ secrets.AWS_REGION }}
       NODE_VERSION: 12.x # used for installing the serverless-python-requirements dependency from NPM
     strategy:
       matrix:

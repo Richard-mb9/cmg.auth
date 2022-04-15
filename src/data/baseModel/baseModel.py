@@ -1,8 +1,6 @@
 from config import get_session
 from sqlalchemy import Column, Integer
 
-#session = get_session()
-
 class BaseModel:
     id = Column(Integer, primary_key=True)
 

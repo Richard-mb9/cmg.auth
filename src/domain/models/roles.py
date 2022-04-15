@@ -3,8 +3,6 @@ from config import Base, get_session
 
 from sqlalchemy import Column, Integer, String
 
-#session = get_session()
-
 class Roles(Base, BaseModel):
     __tablename__ = 'roles'
 

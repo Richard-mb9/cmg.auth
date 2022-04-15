@@ -1,0 +1,44 @@
+service: auth
+
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: python3.6
+  lambdaHashingVersion: 20201221
+  stage: dev
+  region: us-east-2
+
+
+plugins:
+  - serverless-python-requirements
+  - serverless-wsgi
+package:
+  individually: true
+
+
+functions:
+  auth:
+    name: auth
+    handler: wsgi.handler
+    events:
+      - http: ANY /
+      - http: ANY {proxy+}
+    description: auth-lambda
+    timeout: 10 # seconds
+    memorySize: 128 #mb
+    environment:
+      REGION: ${env:AWS_REGION}
+      ACCESS_KEY_ID: ${env:AWS_ACCESS_KEY_ID}
+      SECRET_ACCESS_KEY: ${env:AWS_SECRET_ACCESS_KEY}
+    package:
+      patterns:
+        - "!node_modules/**"
+        - "!yarn.lock"
+        - "!package-lock.json"
+        - "!package.json"
+
+custom:
+  wsgi:
+    app: src/app.app
+    packRequirements: false

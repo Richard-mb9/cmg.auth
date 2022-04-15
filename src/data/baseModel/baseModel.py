@@ -1,4 +1,4 @@
-from config import get_session
+from src.config import get_session
 from sqlalchemy import Column, Integer
 
 class BaseModel:

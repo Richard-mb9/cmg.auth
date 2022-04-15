@@ -1,5 +1,5 @@
 from src.utils.errors import ConflictError, NotFoundError
-from config import get_session
+from src.config import get_session
 from src.domain.models.roles import Roles
 from src.utils.validator import validator
 from src.utils.handlers import object_as_dict

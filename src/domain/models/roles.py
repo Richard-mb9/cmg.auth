@@ -1,5 +1,5 @@
 from src.data.baseModel.baseModel import BaseModel
-from config import Base, get_session
+from src.config import Base, get_session
 
 from sqlalchemy import Column, Integer, String
 

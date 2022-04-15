@@ -15,5 +15,9 @@
   "license": "ISC",
   "devDependencies": {
     "redoc-cli": "^0.13.10"
+  },
+  "dependencies": {
+    "serverless-python-requirements": "^5.4.0",
+    "serverless-wsgi": "^3.0.0"
   }
 }

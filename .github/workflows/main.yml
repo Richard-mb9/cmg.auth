@@ -13,7 +13,7 @@ on:
       - 'release/**'
 
 jobs:
-  Build:
+  deploy:
     name: deploy
     runs-on: ubuntu-latest
     env:
@@ -74,9 +74,7 @@ jobs:
       
       - name: Run tests
         run: npm run test
-  Deploy:
-    name: Deploy
-    steps:
+
       - name: Serverless Deploy
         uses: dhollerbach/github-action-serverless-with-python-requirements@master
         env:

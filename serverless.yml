@@ -5,7 +5,6 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: python3.6
-  lambdaHashingVersion: 20201221
   stage: dev
   region: us-east-2
 
@@ -17,14 +16,19 @@ package:
   individually: true
 
 
+custom:
+  wsgi:
+    app: src/app.app
+    packRequirements: false
+
+
 functions:
   auth:
     name: auth
-    handler: src/app.app
+    handler: wsgi.handler
     events:
       - http: ANY /
       - http: "ANY {proxy+}"
-        private: false
     description: auth-lambda
     timeout: 10 # seconds
     memorySize: 128 #mb
@@ -38,8 +42,3 @@ functions:
         - "!yarn.lock"
         - "!package-lock.json"
         - "!package.json"
-
-#custom:
-#  wsgi:
-#    app: src/app.app
-#    packRequirements: false

@@ -24,7 +24,7 @@ functions:
     events:
       - http: ANY /
       - http: "ANY {proxy+}"
-      private: false
+        private: false
     description: auth-lambda
     timeout: 10 # seconds
     memorySize: 128 #mb

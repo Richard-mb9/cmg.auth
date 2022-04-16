@@ -20,7 +20,7 @@ package:
 functions:
   auth:
     name: auth
-    handler: wsgi.handler
+    handler: src/app.app
     events:
       - http: ANY /
       - http: "ANY {proxy+}"
@@ -39,7 +39,7 @@ functions:
         - "!package-lock.json"
         - "!package.json"
 
-custom:
-  wsgi:
-    app: src/app.app
-    packRequirements: false
+#custom:
+#  wsgi:
+#    app: src/app.app
+#    packRequirements: false

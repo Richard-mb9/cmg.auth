@@ -5,7 +5,7 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: python3.6
-  stage: dev
+  stage: ${env:ENVIRONMENT}
   region: us-east-2
 
 

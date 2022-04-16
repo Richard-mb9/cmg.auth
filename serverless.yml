@@ -24,7 +24,7 @@ custom:
 
 functions:
   auth:
-    name: auth
+    name: auth-${env:ENVIRONMENT}
     handler: wsgi_handler.handler
     events:
       - http: ANY /

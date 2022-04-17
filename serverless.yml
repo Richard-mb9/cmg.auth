@@ -36,6 +36,10 @@ functions:
       REGION: ${env:AWS_REGION}
       ACCESS_KEY_ID: ${env:AWS_ACCESS_KEY_ID}
       SECRET_ACCESS_KEY: ${env:AWS_SECRET_ACCESS_KEY}
+      host_db: ${env:host_db}
+      password_db: ${env:password_db}
+      user_db: ${env:user_db}
+      database: ${env:database}
     package:
       patterns:
         - "!node_modules/**"

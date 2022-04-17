@@ -13,16 +13,10 @@ from src.infra.http.groups.validator import assign_to_rules_validator
 class GroupsService:
     def create_group(self, data):
         validator(insert_group_validator, data)
-        print("validado")
         if self.__group_already_exists(data['name']):
             ConflictError('there is already a group with this name')
-        print("gravando dados")
-        try:
-            group = Groups(name=data['name']).create()
-            return {'id': group.id}
-        except Exception as error:
-            print(error)
-            return {'erro': str(error)}
+        group = Groups(name=data['name']).create()
+        return {'id': group.id}
 
     
     def list(self):

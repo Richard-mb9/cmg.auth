@@ -30,7 +30,7 @@ functions:
       - http: ANY /
       - http: "ANY {proxy+}"
     description: auth-lambda
-    timeout: 10 # seconds
+    timeout: 30 # seconds
     memorySize: 128 #mb
     environment:
       REGION: ${env:AWS_REGION}

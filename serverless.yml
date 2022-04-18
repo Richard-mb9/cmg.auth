@@ -66,8 +66,15 @@ resources:
             Statement:
             - Effect: Allow
               Action:
-                - ec2:CreateNetworkInterface
-                - ec2:DescribeNetworkInterfaces
-                - ec2:DeleteNetworkInterface
-                - ec2:ListNetworkInterface
+                - "rds:*"
+                - "cloudwatch:DescribeAlarms"
+                - "cloudwatch:GetMetricStatistics"
+                - "ec2:CreateNetworkInterface"
+                - "ec2:DescribeNetworkInterfaces"
+                - "ec2:DeleteNetworkInterface"
+                - "ec2:DescribeAccountAttributes"
+                - "ec2:DescribeAvailabilityZones"
+                - "ec2:DescribeSecurityGroups"
+                - "ec2:DescribeSubnets"
+                - "ec2:DescribeVpcs"
               Resource: "*"

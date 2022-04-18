@@ -19,10 +19,8 @@ class Groups(Base ,BaseModel):
 
     def read_by_name(self, name):
         session = get_session()
-        try:
-            return session.query(Groups).filter_by(name=name).all()
-        except Exception as error:
-            return None
+        return session.query(Groups).filter_by(name=name).all()
+
 
 
     def add_roles(self, roles: list):

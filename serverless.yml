@@ -7,6 +7,13 @@ provider:
   runtime: python3.6
   stage: ${env:ENVIRONMENT}
   region: us-east-2
+  #vpc:
+  #  securityGroupIds:
+  #    - sg-0ee8e7ff484435ac7
+  #  subnetIds:
+  #    - subnet-0b24323ea0f80a90c
+  #    - subnet-0fac506d1fede091d
+  #    - subnet-02322f8a56640ad81
 
 
 plugins:
@@ -29,13 +36,18 @@ functions:
     events:
       - http: ANY /
       - http: "ANY {proxy+}"
+      - private: false
     description: auth-lambda
-    timeout: 10 # seconds
+    timeout: 30 # seconds
     memorySize: 128 #mb
     environment:
       REGION: ${env:AWS_REGION}
       ACCESS_KEY_ID: ${env:AWS_ACCESS_KEY_ID}
       SECRET_ACCESS_KEY: ${env:AWS_SECRET_ACCESS_KEY}
+      host_db: ${env:host_db}
+      password_db: ${env:password_db}
+      user_db: ${env:user_db}
+      database: ${env:database}
     package:
       patterns:
         - "!node_modules/**"

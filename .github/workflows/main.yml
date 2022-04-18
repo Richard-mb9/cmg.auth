@@ -44,7 +44,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install flake8 pytest
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install -r requirements.txt
       - name: Lint with flake8
         run: |
           # stop the build if there are Python syntax errors or undefined names
@@ -81,4 +81,8 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          host_db: ${{ secrets.HOST_DB_PRD }}
+          password_db: ${{ secrets.PASSWORD_DB_PRD }}
+          user_db: ${{ secrets.USER_DB_PRD }}
+          database: ${{ secrets.DATABASE_PRD }}
           ENVIRONMENT: prd

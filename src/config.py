@@ -2,10 +2,15 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session as SessionType
 from flask import current_app
+from src.utils.getEnv import getEnv
 
 
-def get_engine(testing):
-    db_uri = 'postgresql+psycopg2://login:login@localhost/cmg_db' \
+def get_engine(testing: bool):
+    host_db = getEnv('host_db') if not testing else None
+    password_db = getEnv('password_db') if not testing else None
+    user_db = getEnv('user_db') if not testing else None
+    database = getEnv('database') if not testing else None
+    db_uri = f'postgresql+psycopg2://{user_db}:{password_db}@{host_db}/{database}' \
     if not testing \
     else 'sqlite:///file.db'
     return create_engine(db_uri)

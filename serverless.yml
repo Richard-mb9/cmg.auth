@@ -7,6 +7,13 @@ provider:
   runtime: python3.6
   stage: ${env:ENVIRONMENT}
   region: us-east-2
+  #vpc:
+  #  securityGroupIds:
+  #    - sg-0ee8e7ff484435ac7
+  #  subnetIds:
+  #    - subnet-0b24323ea0f80a90c
+  #    - subnet-0fac506d1fede091d
+  #    - subnet-02322f8a56640ad81
 
 
 plugins:

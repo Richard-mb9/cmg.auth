@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 from flask_cors import CORS
 
-from src.infra.http.routes import create_routes
+from src.routes.routes import create_routes
 
 from src.config import Base, get_engine
 

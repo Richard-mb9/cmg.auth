@@ -6,8 +6,8 @@ from flask import Response
 
 from src.utils.errors import ConflictError,BadRequestError
 
-from src.domain.models.users import Users
-from src.domain.models.groups import Groups
+from src.modules.auth.domain.models.users import Users
+from src.modules.auth.domain.models.groups import Groups
 
 
 class UserService:

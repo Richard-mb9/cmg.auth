@@ -4,7 +4,7 @@ from flask import request, Response
 from json import loads
 
 from src.security.security import login_required, roles_allowed
-from src.domain.services.users_service import UserService
+from src.modules.auth.domain.services.users_service import UserService
 from src.utils.validator import validator
 from .validators import insert_user_validator
 from .validators import update_password_validator

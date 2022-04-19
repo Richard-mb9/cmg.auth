@@ -2,8 +2,8 @@ from flask import Response
 from http import HTTPStatus
 
 from src.utils.errors import ConflictError, NotFoundError
-from src.domain.models.groups import Groups
-from src.domain.models.roles import Roles
+from src.modules.auth.domain.models.groups import Groups
+from src.modules.auth.domain.models.roles import Roles
 from src.utils.handlers import object_as_dict
 
 class GroupsService:

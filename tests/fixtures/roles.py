@@ -1,5 +1,5 @@
 import pytest
-from src.domain.models.roles import Roles
+from src.modules.auth.domain.models.roles import Roles
 
 roles_admin = [
     'permissions management',

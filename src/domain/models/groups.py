@@ -19,9 +19,7 @@ class Groups(Base ,BaseModel):
 
     def read_by_name(self, name):
         session = get_session()
-        return session.query(Groups).filter_by(name=name).all()
-
-
+        return session.query(Groups).filter_by(name=name).first()
 
     def add_roles(self, roles: list):
         session = get_session()
@@ -39,5 +37,5 @@ class Groups(Base ,BaseModel):
         session.commit()
 
     
-    def __repr__(self):
+    def __repr__(self): # pragma: no cover
         return f'Group {self.name}'

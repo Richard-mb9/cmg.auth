@@ -10,6 +10,33 @@ servers:
     description: Ambiente local
 
 paths:
+  /auth:
+    post:
+      tags:
+        - "Auth"
+      summary: "Gerar um Token para autenticação"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/auth"
+      responses:
+        200:
+          description: "Usuario foi criado com sucesso"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  token:
+                    type: "string"
+                    description: "Token gerado valido por 24 horas"
+                    example: "seuTokenViraAquiComoUmaGrandeString"
+        400:
+          description: "foi enviado algum parametro incorreto no payload, ou as credenciais estão incorretas"
+
+  #usuarios
   /users:
     post:
       tags:
@@ -242,6 +269,20 @@ paths:
                 
 components:
   schemas:
+    auth:
+      type: object
+      required:
+        - "email"
+        - "password"
+      properties:
+        email:
+          type: string
+          example: "Jão@gmail.com"
+          description: "email do usuario"
+        password:
+          type: string
+          example: "123456789"
+          description: "senha"
     users-create:
       type: object
       required:

@@ -1,6 +1,15 @@
 import pytest
 from src.domain.models.roles import Roles
 
+roles_admin = [
+    'permissions management',
+    'groups management',
+    'user management',
+    'delete groups',
+    'delete roles',
+    'create groups',
+    'create roles'
+]
 
 @pytest.fixture(scope='function')
 def roles():

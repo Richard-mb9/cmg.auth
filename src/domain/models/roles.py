@@ -12,6 +12,6 @@ class Roles(Base, BaseModel):
         session = get_session()
         return session.query(Roles).filter_by(name=name).all()
 
-    def __repr__(self):
+    def __repr__(self): # pragma: no cover
         return f'Role {self.name}'
 

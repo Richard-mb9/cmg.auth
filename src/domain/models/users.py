@@ -1,3 +1,4 @@
+from flask import session
 from src.data.baseModel.baseModel import BaseModel
 from src.config import Base, get_session
 
@@ -41,7 +42,11 @@ class Users(Base ,BaseModel):
         session = get_session()
         return session.query(Users).filter_by(email=email).all()
 
-    def __repr__(self):
+    def read_by_email_and_password(self, email, password):
+        session = get_session()
+        return session.query(Users).filter_by(email=email, password=password).first()
+
+    def __repr__(self): # pragma: no cover
         return f'User {self.email}'
 
 

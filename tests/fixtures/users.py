@@ -1,12 +1,18 @@
 import pytest
 from src.domain.models.users import Users
+from src.domain.models.groups import Groups
+from src.domain.models.roles import Roles
+from src.domain.services.users_service import UserService
+from src.domain.services.groups_service import GroupsService
+from src.domain.services.roles_service import RolesService
 
 @pytest.fixture(scope='function')
 def users():
     list = ['teste@teste.com', 'user_teste@teste.com']
     list_users = []
     for email in list:
-        user =  Users(email=email, password='123456').create()
+        data =  UserService().encode_password({'email':email, 'password': '123456'})
+        user =  Users(email=data['email'], password=data['password']).create()
         list_users.append(user)
 
     yield

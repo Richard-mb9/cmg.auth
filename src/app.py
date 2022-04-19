@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_cors import CORS
 
 from src.infra.http.routes import create_routes
@@ -19,3 +19,11 @@ def create_app(testing = False):
     return app
 
 app = create_app()
+
+@app.route('/docs')
+def docs(): # pragma: no cover
+    import os
+    from flask import Response
+    path = os.path.abspath('redoc-static.html')
+    arq = open(path,'r')
+    return Response(response=arq)

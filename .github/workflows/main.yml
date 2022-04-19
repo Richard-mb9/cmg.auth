@@ -18,6 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NODE_VERSION: 12.x # used for installing the serverless-python-requirements dependency from NPM
+      SECRETKEY: ${{ secrets.SECRETKEY }}
     strategy:
       matrix:
         python-version:
@@ -74,6 +75,9 @@ jobs:
       
       - name: Run tests
         run: npm run test
+      
+      - name: Run Redoc
+        run: npm run redoc
 
       - name: Serverless Deploy
         uses: dhollerbach/github-action-serverless-with-python-requirements@master
@@ -85,4 +89,5 @@ jobs:
           password_db: ${{ secrets.PASSWORD_DB_PRD }}
           user_db: ${{ secrets.USER_DB_PRD }}
           database: ${{ secrets.DATABASE_PRD }}
+          SECRETKEY: ${{ secrets.SECRETKEY }}
           ENVIRONMENT: prd

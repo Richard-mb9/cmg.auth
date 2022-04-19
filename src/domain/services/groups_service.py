@@ -4,15 +4,10 @@ from http import HTTPStatus
 from src.utils.errors import ConflictError, NotFoundError
 from src.domain.models.groups import Groups
 from src.domain.models.roles import Roles
-from src.utils.validator import validator
 from src.utils.handlers import object_as_dict
-
-from src.infra.http.groups.validator import insert_group_validator
-from src.infra.http.groups.validator import assign_to_rules_validator
 
 class GroupsService:
     def create_group(self, data):
-        validator(insert_group_validator, data)
         if self.__group_already_exists(data['name']):
             ConflictError('there is already a group with this name')
         group = Groups(name=data['name']).create()
@@ -26,7 +21,7 @@ class GroupsService:
 
     def __group_already_exists(self, name):
         groups = Groups().read_by_name(name)
-        return groups is not None and len(groups) > 0
+        return groups is not None
 
     
     def delete(self, id):
@@ -42,7 +37,6 @@ class GroupsService:
     
     def assign_to_roles(self, group_id, data):
         """must receive a list of role ids, and associate them with the group"""
-        validator(assign_to_rules_validator, data)
         roles_ids = data['roles_ids']
         group: Groups = self.read_by_id(group_id)
         roles = Roles().read_by_id_in(roles_ids)
@@ -52,7 +46,6 @@ class GroupsService:
     
     def unassign_to_roles(self, group_id, data):
         """must receive a list of role ids, and unassociate them with the group"""
-        validator(assign_to_rules_validator, data)
         roles_ids = data['roles_ids']
         group: Groups = self.read_by_id(group_id)
         roles = Roles().read_by_id_in(roles_ids)

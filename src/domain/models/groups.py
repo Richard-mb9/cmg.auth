@@ -18,16 +18,8 @@ class Groups(Base ,BaseModel):
     roles = relationship('Roles', secondary=groups_roles)
 
     def read_by_name(self, name):
-        print("criando seção")
         session = get_session()
-        try:
-            print("proucurando grupo")
-            return session.query(Groups).filter_by(name=name).all()
-        except Exception as error:
-            print('ocorreu um erro')
-            print(error)
-            return None
-
+        return session.query(Groups).filter_by(name=name).first()
 
     def add_roles(self, roles: list):
         session = get_session()
@@ -45,5 +37,5 @@ class Groups(Base ,BaseModel):
         session.commit()
 
     
-    def __repr__(self):
+    def __repr__(self): # pragma: no cover
         return f'Group {self.name}'

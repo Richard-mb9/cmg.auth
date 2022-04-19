@@ -1,6 +1,7 @@
 from hashlib import md5
 from http import HTTPStatus
 from json import dumps
+from pickletools import read_uint1
 from flask import Response
 
 from src.utils.errors import ConflictError,BadRequestError
@@ -8,16 +9,9 @@ from src.utils.errors import ConflictError,BadRequestError
 from src.domain.models.users import Users
 from src.domain.models.groups import Groups
 
-from src.utils.validator import validator
-
-from src.infra.http.users.validators import insert_user_validator
-from src.infra.http.users.validators import update_password_validator
-from src.infra.http.users.validators import assign_to_groups_validator
-
 
 class UserService:
     def create_user(self, user_data):
-        validator(insert_user_validator, user_data)
         if self.__user_already_exists(user_data['email']):
             ConflictError('There is already a user with this registered email')
         user_data = self.encode_password(user_data)
@@ -32,7 +26,6 @@ class UserService:
 
 
     def update_password(self, id, data):
-        validator(update_password_validator, data)
         user: Users = self.read_by_id(id)
         if not self.__check_password(data['old_password'], user):
             BadRequestError('old password incorrect')
@@ -45,6 +38,10 @@ class UserService:
         if user is None:
             BadRequestError('User Not Found')
         return user
+
+
+    def read_by_email_and_password(self, email, password) -> Users:
+        return Users().read_by_email_and_password(email, self.__encode_md5(password))
         
 
     def __encode_md5(self, data:str):
@@ -61,7 +58,6 @@ class UserService:
 
     def assign_to_groups(self, user_id, data):
         """must receive a list of group ids, and associate them with the user"""
-        validator(assign_to_groups_validator, data)
         groups_ids = data['groups_ids']
         user: Users = self.read_by_id(user_id)
         groups = Groups().read_by_id_in(groups_ids)
@@ -71,7 +67,6 @@ class UserService:
 
     def unassign_to_groups(self, user_id, data):
         """must receive a list of group ids, and remove to user"""
-        validator(assign_to_groups_validator, data)
         groups_ids = data['groups_ids']
         user: Users = self.read_by_id(user_id)
         groups = Groups().read_by_id_in(groups_ids)

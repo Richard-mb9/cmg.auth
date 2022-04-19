@@ -1,45 +1,45 @@
 from http import HTTPStatus
 from json import dumps, loads
 
-from flask.testing import FlaskClient
+from .fixtures.app import Client
 
 from src.domain.models.roles import Roles
 from src.domain.models.groups import Groups
 
 
-def test_get_ping_groups_api(client: FlaskClient):
+def test_get_ping_groups_api(client: Client):
     response = client.get('/groups/ping')
     assert response.status_code == HTTPStatus.OK
 
 
-def test_create_group(client: FlaskClient):
+def test_create_group(client: Client):
     data = dumps({'name': 'teste'})
     response = client.post('/groups', data=data)
     assert response.status_code == HTTPStatus.CREATED
     assert 'id' in loads(response.data)
 
 
-def test_fail_create_two_equal_groups(client: FlaskClient):
+def test_fail_create_two_equal_groups(client: Client):
     data = dumps({'name': 'teste'})
     client.post('/groups', data=data)
     response = client.post('/groups', data=data)
     assert response.status_code == HTTPStatus.CONFLICT
 
 
-def test_list_groups(client: FlaskClient, groups):
+def test_list_groups(client: Client, groups):
     response = client.get('/groups')
     data = loads(response.data)
     assert len(data) > 0
 
 
-def test_fail_assign_role_with_invalid_parameters(client: FlaskClient):
+def test_fail_assign_role_with_invalid_parameters(client: Client):
     data = dumps({'invalid': [1]})
     response = client.post(f'/groups/1/roles/assign', data=data)
 
     assert response.status_code == HTTPStatus.BAD_REQUEST 
 
 
-def test_assign_roles_in_group(client: FlaskClient, groups, roles):
+def test_assign_roles_in_group(client: Client, groups, roles):
     roles_in_db = Roles().list()
     groups_in_db = Groups().list()
 
@@ -57,14 +57,14 @@ def test_assign_roles_in_group(client: FlaskClient, groups, roles):
     assert roles_in_group[0].id == group_id
 
 
-def test_fail_unassign_role_with_invalid_parameters(client: FlaskClient):
+def test_fail_unassign_role_with_invalid_parameters(client: Client):
     data = dumps({'invalid': [1]})
     response = client.post(f'/groups/1/roles/unassign', data=data)
 
     assert response.status_code == HTTPStatus.BAD_REQUEST
 
 
-def test_unassign_role_in_group(client: FlaskClient, groups, roles):
+def test_unassign_role_in_group(client: Client, groups, roles):
     roles_in_db = Roles().list()
     groups_in_db = Groups().list()
 
@@ -85,12 +85,12 @@ def test_unassign_role_in_group(client: FlaskClient, groups, roles):
     assert roles_in_group[0].id == role_id2
 
 
-def test_fail_delete_invalid_group(client: FlaskClient, groups):
+def test_fail_delete_invalid_group(client: Client, groups):
     response =  client.delete(f'groups/{0}')
     assert response.status_code == HTTPStatus.NOT_FOUND
 
 
-def test_delete_groups(client: FlaskClient, groups):
+def test_delete_groups(client: Client, groups):
     response = client.get('/groups')
     data = loads(response.data)
     group_id = data[0]['id']

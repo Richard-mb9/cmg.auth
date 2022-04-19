@@ -1,7 +1,7 @@
 import os
 from json import loads
 
-def getEnv(key):
+def getEnv(key): # pragma: no cover
     try:
         path = os.path.abspath('env.json')
         arq = open(path,'r')

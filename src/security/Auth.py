@@ -10,6 +10,6 @@ class Auth:
         return jwt.encode(data,key,algorithm="HS256")
 
     def __getSecretKey(self):
-        return getEnv('secretkey')
+        return getEnv('SECRETKEY')
 
 

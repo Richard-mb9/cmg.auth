@@ -48,7 +48,7 @@ functions:
       password_db: ${env:password_db}
       user_db: ${env:user_db}
       database: ${env:database}
-      secretkey: ${env:SECRETKEY}
+      SECRETKEY: ${env:SECRETKEY}
     package:
       patterns:
         - "!node_modules/**"

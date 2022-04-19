@@ -23,7 +23,7 @@ paths:
                 - $ref: "#/components/schemas/auth"
       responses:
         200:
-          description: "Usuario foi criado com sucesso"
+          description: "Token foi criado com sucesso"
           content:
             application/json:
               schema:

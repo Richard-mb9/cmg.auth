@@ -3,7 +3,7 @@ from json import loads
 
 def getEnv(key): # pragma: no cover
     try:
-        path = os.path.abspath('env-local.json')
+        path = os.path.abspath('env.json')
         arq = open(path,'r')
         j = loads(arq.read())
         return str(j[key])

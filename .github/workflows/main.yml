@@ -18,6 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NODE_VERSION: 12.x # used for installing the serverless-python-requirements dependency from NPM
+      SECRETKEY: ${{ secrets.SECRETKEY }}
     strategy:
       matrix:
         python-version:

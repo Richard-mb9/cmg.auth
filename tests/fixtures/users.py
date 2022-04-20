@@ -1,10 +1,10 @@
 import pytest
-from src.modules.auth.domain.models.users import Users
-from src.modules.auth.domain.models.groups import Groups
-from src.modules.auth.domain.models.roles import Roles
-from src.modules.auth.domain.services.users_service import UserService
-from src.modules.auth.domain.services.groups_service import GroupsService
-from src.modules.auth.domain.services.roles_service import RolesService
+from src.domain.models.users import Users
+from src.domain.models.groups import Groups
+from src.domain.models.roles import Roles
+from src.domain.services.users_service import UserService
+from src.domain.services.groups_service import GroupsService
+from src.domain.services.roles_service import RolesService
 
 @pytest.fixture(scope='function')
 def users():

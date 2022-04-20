@@ -1,6 +1,6 @@
 from flask import session
 import pytest
-from src.modules.auth.domain.models.groups import Groups
+from src.domain.models.groups import Groups
 
 @pytest.fixture(scope='function')
 def groups():

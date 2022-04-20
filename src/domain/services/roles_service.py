@@ -1,6 +1,6 @@
 from src.utils.errors import ConflictError, NotFoundError
-from src.modules.auth.domain.models.roles import Roles
-from src.modules.auth.domain.models.groups import Groups
+from src.domain.models.roles import Roles
+from src.domain.models.groups import Groups
 from src.utils.handlers import object_as_dict
 from .groups_service import GroupsService
 

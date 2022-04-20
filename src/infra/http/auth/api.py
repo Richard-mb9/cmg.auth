@@ -4,7 +4,7 @@ from flask import jsonify
 from .validators import login_validator
 
 from src.utils.validator import validator
-from src.modules.auth.domain.services.auth_service import AuthService
+from src.domain.services.auth_service import AuthService
 
 app = Blueprint('auth', __name__)
 

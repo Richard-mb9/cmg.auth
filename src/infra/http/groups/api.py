@@ -4,7 +4,7 @@ from json import dumps, loads
 from http import HTTPStatus
 from flask import jsonify
 
-from src.modules.auth.domain.services.groups_service import GroupsService
+from src.domain.services.groups_service import GroupsService
 from src.security.security import login_required, roles_allowed
 from src.utils.validator import validator
 from .validator import assign_to_rules_validator

@@ -3,8 +3,8 @@ from json import dumps, loads
 
 from .fixtures.app import Client
 
-from src.modules.auth.domain.models.roles import Roles
-from src.modules.auth.domain.models.groups import Groups
+from src.domain.models.roles import Roles
+from src.domain.models.groups import Groups
 
 
 def test_get_ping_groups_api(client: Client):

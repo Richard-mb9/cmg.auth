@@ -2,8 +2,8 @@ from src.utils.handlers import object_as_dict
 from src.utils.errors import BadRequestError
 from src.security.Auth import Auth
 
-from src.modules.auth.domain.services.users_service import UserService
-from src.modules.auth.domain.models.users import Users
+from src.domain.services.users_service import UserService
+from src.domain.models.users import Users
 
 class AuthService:
     def login(self, data):

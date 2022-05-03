@@ -293,6 +293,13 @@ components:
           type: string
           example: "Jão@gmail.com"
           description: "email do usuario"
+        profile:
+          type: string
+          example: store
+          description: "tipo do perfil do usuario que esta sendo criado"
+          enum:
+            - "user"
+            - "store"
         password:
           type: string
           example: "123456789"

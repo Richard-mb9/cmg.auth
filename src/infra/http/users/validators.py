@@ -4,6 +4,11 @@ insert_user_validator = {
         'regex': '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$',
         'required': True
     },
+    'profile':{
+        'type': 'string',
+        'required': True,
+        'allowed': ['user', 'store']
+    },
     'password': {
         'type': 'string',
         'required': True

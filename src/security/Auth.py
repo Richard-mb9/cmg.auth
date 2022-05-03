@@ -1,5 +1,7 @@
 import jwt
 from src.utils.getEnv import getEnv
+import string
+import random
 
 class Auth:
     def decodeToken(self, token):
@@ -12,4 +14,8 @@ class Auth:
     def __getSecretKey(self):
         return getEnv('SECRETKEY')
 
+    def generate_secret_key(self):
+        random_str = string.ascii_letters + string.digits + string.ascii_uppercase
+        secret_key = ''.join(random.choice(random_str) for i in range(256))
+        print(secret_key)
 

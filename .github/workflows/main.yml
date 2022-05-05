@@ -73,9 +73,9 @@ jobs:
       - name: Install Node dependencies (specifically, serverless-python-requirements)
         run: npm install
 
-      - name: build docker
-        run: npm run build-postgres
-        
+      #- name: build docker
+      #  run: npm run build-postgres
+
       - name: Run tests
         run: npm run test
       

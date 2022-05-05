@@ -5,6 +5,8 @@ from .fixtures.app import Client
 
 from src.domain.models.roles import Roles
 from src.domain.models.groups import Groups
+from src.infra.repositories.roles_repository import RolesRepository
+from src.infra.repositories.groups_repository import GroupsRepository
 
 
 def test_get_ping_groups_api(client: Client):
@@ -40,8 +42,8 @@ def test_fail_assign_role_with_invalid_parameters(client: Client):
 
 
 def test_assign_roles_in_group(client: Client, groups, roles):
-    roles_in_db = Roles().list()
-    groups_in_db = Groups().list()
+    roles_in_db = RolesRepository(Roles).list()
+    groups_in_db = GroupsRepository(Groups).list()
 
     role_id = roles_in_db[0].id
     group_id = groups_in_db[0].id
@@ -51,7 +53,7 @@ def test_assign_roles_in_group(client: Client, groups, roles):
 
     assert response.status_code == HTTPStatus.NO_CONTENT
 
-    group = Groups().read_by_id(group_id)
+    group = GroupsRepository(Groups).read_by_id(group_id)
     roles_in_group = group.roles
     assert len(roles_in_group) == 1
     assert roles_in_group[0].id == group_id
@@ -65,8 +67,8 @@ def test_fail_unassign_role_with_invalid_parameters(client: Client):
 
 
 def test_unassign_role_in_group(client: Client, groups, roles):
-    roles_in_db = Roles().list()
-    groups_in_db = Groups().list()
+    roles_in_db = RolesRepository(Roles).list()
+    groups_in_db = GroupsRepository(Groups).list()
 
     role_id1 = roles_in_db[0].id
     role_id2 = roles_in_db[1].id
@@ -79,7 +81,7 @@ def test_unassign_role_in_group(client: Client, groups, roles):
     response = client.post(f'/groups/{group_id}/roles/unassign', data=data)
     assert response.status_code == HTTPStatus.NO_CONTENT
 
-    group = Groups().read_by_id(group_id)
+    group = GroupsRepository(Groups).read_by_id(group_id)
     roles_in_group = group.roles
     assert len(roles_in_group) == 1
     assert roles_in_group[0].id == role_id2

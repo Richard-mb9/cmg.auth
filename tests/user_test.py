@@ -5,6 +5,8 @@ from .fixtures.app import Client
 
 from src.domain.models.users import Users
 from src.domain.models.groups import Groups
+from src.infra.repositories.groups_repository import GroupsRepository
+from src.infra.repositories.users_repository import UsersRepository
 
 
 def test_get_ping_users_api(client: Client):
@@ -13,7 +15,7 @@ def test_get_ping_users_api(client: Client):
 
 
 def test_create_user(client: Client):
-    data = dumps({'email': 'teste@teste.com', 'password': '123456', 'profile': 'user'})
+    data = dumps({'email': 'teste_create_user@teste.com', 'password': '123456', 'profile': 'user'})
     response = client.post('/users', data=data)
 
     assert 'id' in loads(response.data)
@@ -83,8 +85,8 @@ def test_fail_assign_group_in_user_without_token(client: Client):
 
 
 def test_assign_group_in_user(client: Client, users, groups):
-    users_in_db = Users().list()
-    groups_in_db = Groups().list()
+    users_in_db = UsersRepository(Users).list()
+    groups_in_db = GroupsRepository(Groups).list()
 
     user_id = users_in_db[0].id
     group_id = groups_in_db[0].id
@@ -94,7 +96,7 @@ def test_assign_group_in_user(client: Client, users, groups):
 
     assert response.status_code == HTTPStatus.NO_CONTENT
 
-    user = Users().read_by_id(user_id)
+    user = UsersRepository(Users).read_by_id(user_id)
     groups_in_user = user.groups
     assert len(groups_in_user) == 1
     assert groups_in_user[0].id == group_id
@@ -108,8 +110,8 @@ def test_fail_unassign_group_with_invalid_parameters(client: Client):
 
 
 def test_unassign_group_in_user(client: Client, users, groups):
-    users_in_db = Users().list()
-    groups_in_db = Groups().list()
+    users_in_db = UsersRepository(Users).list()
+    groups_in_db = GroupsRepository(Groups).list()
 
     user_id = users_in_db[0].id
     group_id1 = groups_in_db[0].id
@@ -121,7 +123,7 @@ def test_unassign_group_in_user(client: Client, users, groups):
     response = client.post(f'/users/{user_id}/groups/unassign', data=data)
     assert response.status_code == HTTPStatus.NO_CONTENT
 
-    user = Users().read_by_id(user_id)
+    user = UsersRepository(Users).read_by_id(user_id)
     groups_in_user = user.groups
     assert len(groups_in_user) == 1
     assert groups_in_user[0].id == group_id2

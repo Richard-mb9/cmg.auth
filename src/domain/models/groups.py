@@ -1,5 +1,4 @@
-from src.data.baseModel.baseModel import BaseModel
-from src.config import Base, get_session
+from src.config import Base
 
 from sqlalchemy import Column, Integer, String, ForeignKey, Table
 from sqlalchemy.orm import relationship
@@ -11,31 +10,12 @@ groups_roles = Table('groups_roles', Base.metadata,
 )
 
 
-class Groups(Base ,BaseModel):
+class Groups(Base):
     __tablename__ = 'groups'
 
+    id = Column(Integer, primary_key=True)
     name = Column(String)
     roles = relationship('Roles', secondary=groups_roles)
-
-    def read_by_name(self, name):
-        session = get_session()
-        return session.query(Groups).filter_by(name=name).first()
-
-    def add_roles(self, roles: list):
-        session = get_session()
-        for role in roles:
-            self.roles.append(role)
-        session.commit()
-
-    def remove_roles(self, roles: list):
-        session = get_session()
-        new_roles = []
-        for role in self.roles:
-            if role not in roles:
-                new_roles.append(role)
-        self.roles = new_roles
-        session.commit()
-
     
     def __repr__(self): # pragma: no cover
         return f'Group {self.name}'

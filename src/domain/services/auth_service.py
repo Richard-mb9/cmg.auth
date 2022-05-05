@@ -15,7 +15,8 @@ class AuthService:
         token_data = {
             'id': user.id,
             'email': user.email,
-            'roles': roles
+            'roles': roles,
+            'profile': user.profile
         }
         return {'token': Auth().generateToken(token_data)}
 

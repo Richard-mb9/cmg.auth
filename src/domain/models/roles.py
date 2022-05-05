@@ -1,16 +1,12 @@
-from src.data.baseModel.baseModel import BaseModel
-from src.config import Base, get_session
+from src.config import Base
 
 from sqlalchemy import Column, Integer, String
 
-class Roles(Base, BaseModel):
+class Roles(Base):
     __tablename__ = 'roles'
 
+    id = Column(Integer, primary_key=True)
     name = Column(String)
-
-    def read_by_name(self, name):
-        session = get_session()
-        return session.query(Roles).filter_by(name=name).all()
 
     def __repr__(self): # pragma: no cover
         return f'Role {self.name}'

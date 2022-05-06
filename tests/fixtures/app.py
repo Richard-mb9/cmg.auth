@@ -1,8 +1,11 @@
 import pytest
 from flask.testing import FlaskClient
+from dotenv import find_dotenv, load_dotenv
 from src.app import create_app
 from .roles import roles_admin
 from src.security.Auth import Auth
+from src.config import Base, get_engine
+
 
 class Client(FlaskClient):
     def __init__(self, app):
@@ -54,7 +57,10 @@ class Client(FlaskClient):
 
 @pytest.fixture(scope='session')
 def app():
-    app = create_app(True)
+    env = find_dotenv('.env.test')
+    load_dotenv(env)
+    Base.metadata.create_all(bind=get_engine())
+    app = create_app()
 
     yield app
     import os

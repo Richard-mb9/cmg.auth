@@ -1,5 +1,4 @@
 from src.config import get_session
-from sqlalchemy import Column, Integer
 
 class BaseRepository:
     def __init__(self, entity):

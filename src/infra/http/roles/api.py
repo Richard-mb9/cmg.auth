@@ -1,10 +1,10 @@
 from flask import Blueprint
 from flask import request, Response
-from json import dumps, loads
+from json import loads
 from http import HTTPStatus
 from flask import jsonify
 
-from src.security.security import login_required, roles_allowed
+from src.security.security import roles_allowed
 from src.domain.services.roles_service import RolesService
 from src.utils.validator import validator
 from .validator import insert_rule_validator
@@ -19,7 +19,7 @@ def ping():
 
 
 @app.route('', methods=['POST'])
-@roles_allowed('create roles')
+@roles_allowed('CREATE_ROLES')
 def create_rule():
     data = loads(request.data)
     validator(insert_rule_validator, data)
@@ -27,13 +27,13 @@ def create_rule():
 
 
 @app.route('', methods=['GET'])
-@login_required
+@roles_allowed('READ_ROLES', 'CREATE_ROLES')
 def list_roles():
     return jsonify(service.list())
 
 
 @app.route('/<rule_id>', methods=['DELETE'])
-@roles_allowed('delete roles')
+@roles_allowed('DELETE_ROLES')
 def delete_role(rule_id):
     service.delete_role(rule_id)
     return Response(status=HTTPStatus.NO_CONTENT)

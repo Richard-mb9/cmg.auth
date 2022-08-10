@@ -1,4 +1,4 @@
-from flask import abort, Response
+from flask import abort, Response, make_response, jsonify
 from json import dumps
 from http import HTTPStatus
 
@@ -12,11 +12,7 @@ class ApiError(Exception):
         self._exec()
     
     def _exec(self):
-        abort(
-            Response(
-                response=dumps({'error': self.message}), 
-                status=self.status_code)
-            )
+        abort(make_response(jsonify({'error': self.message}), self.status_code))
 
 
 class BadRequestError(ApiError):

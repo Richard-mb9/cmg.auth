@@ -1,4 +1,4 @@
-insert_group_validator = {
+insert_profile_validator = {
     'name': {
         'type': 'string',
         'required': True

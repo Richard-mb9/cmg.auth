@@ -1,23 +1,23 @@
 from src.utils.errors import ConflictError, NotFoundError
 from src.domain.models.roles import Roles
-from src.domain.models.groups import Groups
+from src.domain.models.profiles import Profiles
 from src.utils.handlers import object_as_dict
-from .groups_service import GroupsService
+from .profiles_service import ProfilesService
 from src.infra.repositories.roles_repository import RolesRepository
-from src.infra.repositories.groups_repository import GroupsRepository
+from src.infra.repositories.profiles_repository import ProfilesRepository
 
 
 class RolesService:
     def __init__(self):
-        self.repository = RolesRepository(Roles)
-        self.groups_repository = GroupsRepository(Groups)
+        self.repository = RolesRepository()
+        self.profiles_repository = ProfilesRepository()
 
     def create_role(self, data):
         if self.__role_already_exists(data['name']):
             ConflictError('there is already a role with this name')
         role = Roles(name=data['name'])
         self.repository.create(role)
-        self.__assign_role_to_admin_group(role.id)
+        self.__assign_role_to_admin_profile(role.id)
         return {'id': role.id}
 
 
@@ -42,10 +42,10 @@ class RolesService:
         return roles is not None and len(roles) > 0
 
     
-    def __assign_role_to_admin_group(self, role_id):
-        """assign the new permission to the admin group"""
-        group = self.groups_repository.read_by_name('admin')
-        if not group:
-            group = Groups(name='admin')
-            self.groups_repository.create(group)
-        GroupsService().assign_to_roles(group.id, {'roles_ids': [role_id]})
+    def __assign_role_to_admin_profile(self, role_id):
+        """assign the new permission to the admin profile"""
+        profile = self.profiles_repository.read_by_name('ADMIN')
+        if not profile:
+            profile = Profiles(name='ADMIN')
+            self.profiles_repository.create(profile)
+        ProfilesService().assign_to_roles(profile.id, {'roles_ids': [role_id]})

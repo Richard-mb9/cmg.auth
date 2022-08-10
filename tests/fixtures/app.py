@@ -13,27 +13,28 @@ class Client(FlaskClient):
         self.token_data = {
             'id': 1,
             'email': 'teste@teste.com',
-            'roles': roles_admin
+            'roles': roles_admin,
+            'profile': 'ADMIN'
         }
 
     def get(self, path: str, headers = {}, use_token = True):
         if headers == {} and use_token:
-            headers = {'access_token': self.__generate_token()}
+            headers = {'authorization': f'Bearer {self.__generate_token()}'}
         return super().get(path, headers=headers)
     
     def post(self, path: str, data, headers = {}, use_token = True):
         if headers == {} and use_token:
-            headers = {'access_token': self.__generate_token()}
+            headers = {'authorization': f'Bearer {self.__generate_token()}'}
         return super().post(path,data=data, headers=headers)
     
     def put(self, path: str, data, headers = {}, use_token = True):
         if headers == {} and use_token:
-            headers = {'access_token': self.__generate_token()}
+            headers = {'authorization': f'Bearer {self.__generate_token()}'}
         return super().put(path,data=data, headers=headers)
     
     def delete(self, path: str, headers = {}, use_token = True):
         if headers == {} and use_token:
-            headers = {'access_token': self.__generate_token()}
+            headers = {'authorization': f'Bearer {self.__generate_token()}'}
         return super().delete(path, headers=headers)
 
     def roles(self, roles):
@@ -41,6 +42,10 @@ class Client(FlaskClient):
             self.token_data['roles'] = [roles]
         if isinstance(roles, list):
             self.token_data['roles'] = roles
+        return self
+    
+    def profile(self, profile_name: str):
+        self.token_data['profile'] = profile_name
         return self
     
     def user_id(self, user_id):

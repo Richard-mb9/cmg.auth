@@ -1,17 +1,20 @@
+from src.utils.enums.profiles import ProfilesEnum
+
+
 insert_user_validator = {
     'email': {
         'type': 'string',
         'regex': '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$',
         'required': True
     },
-    'profile':{
-        'type': 'string',
-        'required': True,
-        'allowed': ['user', 'store']
-    },
     'password': {
         'type': 'string',
         'required': True
+    },
+    'profile': {
+        'type': 'string',
+        'required': True,
+        'allowed': [profile.value for profile in ProfilesEnum]
     }
 }
 
@@ -24,22 +27,4 @@ update_password_validator = {
         'type': 'string',
         'required': True
     }
-}
-
-
-insert_rule_validator = {
-    'name': {
-        'type': 'string',
-        'required': True
-    },
-}
-
-assign_to_groups_validator = {
-    'groups_ids': {
-        'type': 'list',
-        'schema': {
-            'type': 'number'
-        },
-        'required': True
-    },
 }

@@ -4,18 +4,18 @@ from sqlalchemy import Column, Integer, String, ForeignKey, Table
 from sqlalchemy.orm import relationship
 
 
-groups_roles = Table('groups_roles', Base.metadata,
-    Column('group_id', Integer,ForeignKey('groups.id')),
+profiles_roles = Table('profiles_roles', Base.metadata,
+    Column('profile_id', Integer,ForeignKey('profiles.id')),
     Column('role_id', Integer,ForeignKey('roles.id'))
 )
 
 
-class Groups(Base):
-    __tablename__ = 'groups'
+class Profiles(Base):
+    __tablename__ = 'profiles'
 
     id = Column(Integer, primary_key=True)
     name = Column(String)
-    roles = relationship('Roles', secondary=groups_roles)
+    roles = relationship('Roles', secondary=profiles_roles)
     
     def __repr__(self): # pragma: no cover
-        return f'Group {self.name}'
+        return f'Profile {self.name}'

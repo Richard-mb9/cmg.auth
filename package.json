@@ -10,7 +10,8 @@
     "test": "pytest --cov=./src --cov-report=html",
     "redoc": "redoc-cli bundle swagger.yaml",
     "build-postgres":"cd tests/db && docker-compose up -d",
-    "create-tables": "python3 create_tables.py"
+    "makemigrations": "alembic revision --autogenerate",
+    "update-database": "alembic upgrade head"
   },
   "keywords": [],
   "author": "",

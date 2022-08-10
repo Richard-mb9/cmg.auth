@@ -10,16 +10,21 @@ def is_testing():
     return bool(strtobool(config('testing', default='False')))
 
 
-def get_engine():
+def get_db_url():
     testing = is_testing()
-    host_db = config('host_db', default=None) if not testing else None
-    password_db = config('password_db', default=None) if not testing else None
-    user_db = config('user_db', default=None) if not testing else None
-    database = config('database', default=None) if not testing else None
-    db_uri = f'postgresql+psycopg2://{user_db}:{password_db}@{host_db}/{database}' \
+    host_db = config('HOST_DB', default=None) if not testing else None
+    password_db = config('PASSWORD_DB', default=None) if not testing else None
+    user_db = config('USER_DB', default=None) if not testing else None
+    database = config('NAME_DB', default=None) if not testing else None
+    port_db = config('PORT_DB', default=None) if not testing else None
+    return f'postgresql+psycopg2://{user_db}:{password_db}@{host_db}:{port_db}/{database}' \
     if not testing \
     else 'sqlite:///file.db'
-    return create_engine(db_uri)
+
+
+def get_engine():
+    url_db = get_db_url()
+    return create_engine(url_db)
     
 
 def get_session() -> SessionType:

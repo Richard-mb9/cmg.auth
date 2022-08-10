@@ -1,33 +1,42 @@
 from hashlib import md5
 from http import HTTPStatus
-from json import dumps
-from pickletools import read_uint1
 from flask import Response
 
-from src.utils.errors import ConflictError,BadRequestError
+from src.utils.errors import ConflictError,BadRequestError, AccessDeniedError
+from src.security.security import is_authenticated, has_role, has_profile
 
 from src.domain.models.users import Users
-from src.domain.models.groups import Groups
+from src.domain.services.profiles_service import ProfilesService
 from src.infra.repositories.users_repository import UsersRepository
-from src.infra.repositories.groups_repository import GroupsRepository
 
 
 class UserService:
     def __init__(self):
-        self.repository = UsersRepository(Users)
-        self.groups_repository = GroupsRepository(Groups)
+        self.repository = UsersRepository()
 
     def create_user(self, user_data):
+        self.__validate_no_default_user(user_data)
         if self.__user_already_exists(user_data['email']):
             ConflictError('There is already a user with this registered email')
         user_data = self.encode_password(user_data)
+        profile = ProfilesService().read_by_name(user_data['profile'])
         user = Users(
             email=user_data['email'], 
-            password=user_data['password'], 
-            profile=user_data['profile']
+            password=user_data['password'],
+            profile_id=profile.id
         )
         self.repository.create(user)
-        return dumps({'id': user.id})
+        return {'id': user.id}
+    
+    def __validate_no_default_user(self, user_data):
+        profile = user_data['profile']
+        if profile not in ['STORE, USER'] and not is_authenticated():
+            raise AccessDeniedError("you are not allowed to create this type of user")
+        if profile in ["ADMIN", "BACKOFFICE"] and not has_profile('ADMIN'):
+            raise AccessDeniedError("you are not allowed to create this type of user")
+        if profile in ["MANAGER", "TABLE", "WAITER", "KITCHEN", "CASH_OPERATOR"] \
+        and not has_profile("ADMIN", "BACKOFFICE", "STORE"):
+            raise AccessDeniedError("you are not allowed to create this type of user")
 
         
     def encode_password(self, user_data):
@@ -63,23 +72,5 @@ class UserService:
         return len(self.repository.read_by_email(email)) > 0
 
 
-    def __check_password(self, password, user):
+    def __check_password(self, password, user: Users):
         return user.password == self.__encode_md5(password)
-
-
-    def assign_to_groups(self, user_id, data):
-        """must receive a list of group ids, and associate them with the user"""
-        groups_ids = data['groups_ids']
-        user: Users = self.read_by_id(user_id)
-        groups = self.groups_repository.read_by_id_in(groups_ids)
-        self.repository.add_groups(user, groups)
-        return Response(status=HTTPStatus.NO_CONTENT)
-
-
-    def unassign_to_groups(self, user_id, data):
-        """must receive a list of group ids, and remove to user"""
-        groups_ids = data['groups_ids']
-        user: Users = self.read_by_id(user_id)
-        groups = self.groups_repository.read_by_id_in(groups_ids)
-        self.repository.remove_groups(user, groups)
-        return Response(status=HTTPStatus.NO_CONTENT)

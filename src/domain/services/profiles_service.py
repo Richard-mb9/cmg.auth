@@ -43,8 +43,13 @@ class ProfilesService:
         if profile is None and raise_not_found:
             NotFoundError('profile not found')
         return profile
-
     
+    def list_roles_from_profiles(self, profile_id: int):
+        profile = self.read_by_id(profile_id)
+        if profile is None:
+            raise NotFoundError('profile not found')
+        return object_as_dict(profile.roles)
+
     def assign_to_roles(self, profile_id, data):
         """must receive a list of role ids, and associate them with the profile"""
         roles_ids = data['roles_ids']
@@ -53,7 +58,6 @@ class ProfilesService:
         self.repository.add_roles(profile, roles)
         return Response(status=HTTPStatus.NO_CONTENT)
 
-    
     def unassign_to_roles(self, profile_id, data):
         """must receive a list of role ids, and unassociate them with the profile"""
         roles_ids = data['roles_ids']

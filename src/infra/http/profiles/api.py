@@ -34,6 +34,12 @@ def list_profiles():
     return jsonify(service.list())
 
 
+@app.route('/<profile_id>/roles', methods=['GET'])
+@roles_allowed('CREATE_PROFILES', 'READ_PROFILES')
+def list_roles_from_profiles(profile_id: int):
+    return jsonify(service.list_roles_from_profiles(profile_id))
+
+
 @app.route('/<profile_id>', methods=['DELETE'])
 @roles_allowed('DELETE_PROFILES')
 def delete_profile(profile_id):

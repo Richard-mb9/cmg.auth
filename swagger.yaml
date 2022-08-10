@@ -138,6 +138,31 @@ paths:
           description: "Perfil excluido com sucesso"
         404:
           description: "Não existe perfil cadastrado com o id enviado"
+  
+  /profiles/{profile_id}/roles:
+    get:
+      tags:
+        - "Perfis de usuarios"
+      summary: "Listar as permissões de determinado perfil"
+      parameters:
+        - id: path
+          name: profile_id
+          schema:
+            type: integer
+          required: true
+          description: id do perfil de usuario que sera exibido
+      responses:
+        200:
+          description: "Listagem realizada com sucesso"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/roles"
+        404:
+          description: "Não existe perfil cadastrado com o id enviado"
+
   /profiles/{profile_id}/roles/assign:
     post:
       tags:

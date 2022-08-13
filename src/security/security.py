@@ -39,10 +39,6 @@ def get_profile():
 
 def has_role(roles):
     user_roles = get_roles()
-    if isinstance(roles, list):
-        for role in roles:
-            if role in user_roles:
-                return True
     return roles in user_roles
 
 

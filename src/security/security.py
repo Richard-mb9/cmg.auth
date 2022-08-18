@@ -42,9 +42,12 @@ def has_role(roles):
     return roles in user_roles
 
 
-def has_profile(profiles):
-    user_profile = get_profile()
-    return user_profile in profiles
+def has_profile(*profiles):
+    user_profiles = get_profile()
+    for profile in user_profiles:
+        if profile in profiles:
+            return True
+    return False
 
 
 def roles_allowed(*roles):

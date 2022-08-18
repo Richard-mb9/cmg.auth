@@ -14,7 +14,7 @@ class Client(FlaskClient):
             'id': 1,
             'email': 'teste@teste.com',
             'roles': roles_admin,
-            'profile': 'ADMIN'
+            'profiles': ['ADMIN']
         }
 
     def get(self, path: str, headers = {}, use_token = True):
@@ -44,8 +44,8 @@ class Client(FlaskClient):
             self.token_data['roles'] = roles
         return self
     
-    def profile(self, profile_name: str):
-        self.token_data['profile'] = profile_name
+    def profile(self, profiles: list):
+        self.token_data['profiles'] = profiles
         return self
     
     def user_id(self, user_id):

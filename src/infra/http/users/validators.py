@@ -11,8 +11,11 @@ insert_user_validator = {
         'type': 'string',
         'required': True
     },
-    'profile': {
-        'type': 'string',
+    'profiles': {
+        'type': 'list',
+        'schema': {
+            'type': 'string',
+        },
         'required': True,
         'allowed': [profile.value for profile in ProfilesEnum]
     }
@@ -27,4 +30,22 @@ update_password_validator = {
         'type': 'string',
         'required': True
     }
+}
+
+update_user_profiles_validator = {
+    
+    'profiles': {
+        'type': 'list',
+        'schema': {
+            'type': 'string',
+        },
+        'allowed': [profile.value for profile in ProfilesEnum]
+    }
+}
+
+
+update_user_validator = {
+    'enable': {
+        'type': 'boolean'
+    },
 }

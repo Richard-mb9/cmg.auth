@@ -64,6 +64,75 @@ paths:
           description: "Já existe um usuario cadastrado com o email enviado"
         400:
           description: "foi enviado algum parametro incorreto no payload"
+    get:
+      tags:
+        - "Usuarios"
+      summary: "Lista usuarios"
+      responses:
+        200:
+          description: "Listagem realizada com sucesso"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/user"
+        403:
+          description: "Você não tem permissão para listar usuarios"
+
+  /users/{user_id}:
+    put:
+      tags:
+        - "Usuarios"
+      summary: "Atualiza um usuario"
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: integer
+          required: true
+          description: id do usuario
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                enable:
+                  type: string
+                  example: false
+                  description: Flag que indica se o usuario esta ativo
+      responses:
+        204:
+          description: "A Usuario alterado com sucesso"
+        400:
+          description: "Algum parametro incorreto foi enviado, ou a senha antiga esta incorreta"
+        403:
+          description: "Usuario não tem permissão para atualizar outros usuarios"
+
+  /users/{user_id}/profiles:
+    put:
+      tags:
+        - "Usuarios"
+      summary: "Altera os Perfis de determinado usuario"
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: integer
+          required: true
+          description: id do usuario
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/users-update-profiles"
+      responses:
+        204:
+          description: "A Usuario alterado com sucesso"
+        400:
+          description: "Algum parametro incorreto foi enviado, ou a senha antiga esta incorreta"
 
   /users/{user_id}/update-password:
     put:
@@ -135,7 +204,45 @@ paths:
           description: "Já existe um perfil cadastrado com o nome enviado"
         400:
           description: "foi enviado algum parametro incorreto no payload"
+
   /profiles/{profile_id}:
+    put:
+      tags:
+        - "Perfis de usuarios"
+      summary: "Atualizar um perfil"
+      parameters:
+        - in: path
+          name: profile_id
+          schema:
+            type: integer
+          required: true
+          description: id do perfil
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "PERFIL_EXEMPLO"
+                  description: "novo nome do perfil"
+                roles_ids:
+                  type: array
+                  items:
+                    type: number
+                    example: 1
+                    description: "ids das permissões que serão atribuidas ao perfil"
+      responses:
+        204:
+          description: "Perfil atualizado com sucesso"
+        401:
+          description: "Necessario autenticação"
+        403:
+          description: "O Usuario não ter permissão para atualziar perfis"
+        404:
+          description: "Não existe perfil cadastrado com o id enviado"
+              
     delete:
       tags:
         - "Perfis de usuarios"
@@ -177,58 +284,10 @@ paths:
         404:
           description: "Não existe perfil cadastrado com o id enviado"
 
-  /profiles/{profile_id}/roles/assign:
-    post:
-      tags:
-        - "Perfis de usuarios"
-      summary: "Atribuir uma permissão ao perfil"
-      parameters:
-        - in: path
-          name: profile_id
-          schema:
-            type: integer
-          required: true
-          description: id do perfil de usuario
-      requestBody:
-        content:
-          application/json:
-            schema:
-              allOf:
-                - $ref: "#/components/schemas/profiles-assign-roles"
-      responses:
-        204:
-          description: "A Permissão foi atribuida ao perfil com sucesso"
-        400:
-          description: "Algum parametro incorreto foi enviado no payload"
-  /profiles/{profile_id}/roles/unassign:
-    post:
-      tags:
-        - "Perfis de usuarios"
-      summary: "Remover uma permissão do perfil"
-      parameters:
-        - in: path
-          name: profile_id
-          schema:
-            type: integer
-          required: true
-          description: id do perfil de usuario
-      requestBody:
-        content:
-          application/json:
-            schema:
-              allOf:
-                - $ref: "#/components/schemas/profiles-assign-roles"
-      responses:
-        204:
-          description: "A Permissão foi remida do perfil com secesso"
-        400:
-          description: "Algum parametro incorreto foi enviado no payload"
-
-
   /roles:
     get:
       tags:
-        - "Permissoes"
+        - "Permissões"
       summary: "Lista as permissões cadastradas"
       responses:
         200:
@@ -241,7 +300,7 @@ paths:
                   $ref: "#/components/schemas/roles"
     post:
       tags:
-        - "Permissoes"
+        - "Permissões"
       summary: "Criar uma nova permissão"
       requestBody:
         content:
@@ -273,9 +332,40 @@ paths:
           description: "foi enviado algum parametro incorreto no payload"
   
   /roles/{role_id}:
+    put:
+      tags:
+          - "Permissões"
+      summary: "Atualizar Permissões"
+      parameters:
+      - in: path
+        name: role_id
+        schema:
+          type: integer
+        required: true
+        description: id da permissão que será Atualizada
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - "name"
+              properties:
+                name:
+                  type: string
+                  example: "PERMISSAO_EXEMPLO"
+                  description: "novo nome da permissão"
+      responses:
+          204:
+            description: "Permissão atualizada com sucesso"
+          403:
+            description: "Usuario não tem permissão para atualizar permissões"
+          404:
+            description: "Não existe permissão cadastrada com o id enviado"
+
     delete:
         tags:
-          - "Permissoes"
+          - "Permissões"
         summary: "Deletar Permissões"
         parameters:
         - in: path
@@ -313,30 +403,53 @@ components:
       required:
         - "email"
         - "password"
-        - "profile_id"
+        - "profiles"
       properties:
         email:
           type: string
           example: "Jão@gmail.com"
           description: "email do usuario"
-        profile:
-          type: string
-          example: store
-          description: "tipo do perfil do usuario que esta sendo criado"
-          enum:
-            - "USER"
-            - "ADMIN"
-            - "BACKOFFICE"
-            - "STORE"
-            - "MANAGER"
-            - "TABLE"
-            - "WAITER"
-            - "KITCHEN"
-            - "CASH_OPERATOR"
+        profiles:
+          type: array
+          example: ["STORE", "MANAGER"]
+          description: "Perfis do usuario"
+          items:
+            type: string
+            enum:
+              - "USER"
+              - "ADMIN"
+              - "BACKOFFICE"
+              - "STORE"
+              - "MANAGER"
+              - "TABLE"
+              - "WAITER"
+              - "KITCHEN"
+              - "CASH_OPERATOR"
         password:
           type: string
           example: "123456789"
           description: "senha"
+    users-update-profiles:
+      type: object
+      required:
+        - "profiles"
+      properties:
+        profiles:
+          type: array
+          example: ["STORE", "MANAGER"]
+          description: "Perfis do usuario"
+          items:
+            type: string
+            enum:
+              - "USER"
+              - "ADMIN"
+              - "BACKOFFICE"
+              - "STORE"
+              - "MANAGER"
+              - "TABLE"
+              - "WAITER"
+              - "KITCHEN"
+              - "CASH_OPERATOR"
     update-password:
       type: object
       required:
@@ -389,3 +502,29 @@ components:
             type: number
             example: 1
             description: "ids das permissões que serão atribuidas ao perfil"
+    user:
+      type: object
+      required:
+        - "id"
+        - "email"
+        - "profiles"
+        - "enabed"
+      properties:
+        id:
+          type: integer
+          example: 1
+          description: id do usuario
+        email:
+          type: string
+          example: user@hotmail.com
+          description: email do usuario
+        profiles:
+          type: array
+          items:
+            type: string
+          description: lista que contem os perfis do usuario
+          example: ["STORE", "MANAGER"]
+        enabled:
+          type: boolean
+          example: true
+          description: flag que indica se o usuario esta ativo

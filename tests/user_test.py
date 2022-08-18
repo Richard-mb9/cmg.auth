@@ -10,7 +10,7 @@ def test_get_ping_users_api(client: Client):
 
 
 def test_create_user(client: Client, profiles):
-    data = dumps({'email': 'teste_create_user@teste.com', 'password': '123456', 'profile': 'USER'})
+    data = dumps({'email': 'teste_create_user@teste.com', 'password': '123456', 'profiles': ['USER']})
     response = client.post('/users', data=data)
 
     assert 'id' in loads(response.data)
@@ -25,7 +25,7 @@ def test_fail_create_with_invalid_parameters(client: Client):
 
 
 def test_fail_create_two_users_with_the_same_email(client: Client, profiles):
-    data = dumps({'email': 'teste@teste.com', 'password': '123456', 'profile': 'USER'})
+    data = dumps({'email': 'teste@teste.com', 'password': '123456', 'profiles': ['USER']})
     client.post('/users', data=data)
     response = client.post('/users', data=data)
     assert response.status_code == HTTPStatus.CONFLICT
@@ -50,7 +50,7 @@ def test_fail_update_password_with_incorrect_parameters(client: Client, users):
 
 
 def test_update_password(client: Client, profiles):
-    data = dumps({'email': 'teste2@teste.com', 'password': '123456', 'profile': 'USER'})
+    data = dumps({'email': 'teste2@teste.com', 'password': '123456', 'profiles': ['USER']})
     response =  client.post('/users', data=data)
     id = loads(response.data)['id']
 

@@ -1,3 +1,4 @@
+from typing import List
 from src.utils.handlers import object_as_dict
 from src.utils.errors import BadRequestError
 from src.security.Auth import Auth
@@ -12,13 +13,14 @@ class AuthService:
         user: Users = UserService().read_by_email_and_password(data['email'], data['password'])
         if not user:
             raise BadRequestError("incorrect credentials")
-        profile = ProfilesService().read_by_id(user.profile_id, raise_not_found=False)
-        roles = self.get_roles(profile)
+        profiles = user.profiles
+        roles = self.get_roles(profiles)
+        profiles_names = [profile.name for profile in profiles]
         token_data = {
             'id': user.id,
             'email': user.email,
             'roles': roles,
-            'profile': profile.name
+            'profile': profiles_names
         }
         return {
             'access_token': Auth().generateToken(token_data),
@@ -26,11 +28,12 @@ class AuthService:
         }
 
 
-    def get_roles(self, profile: Profiles):
+    def get_roles(self, profiles: List[Profiles]):
         roles = set()
-        roles_in_profile = object_as_dict(profile.roles)
-        for role in roles_in_profile:
-            roles.add(role['name'])
+        for profile in profiles:
+            roles_in_profile = object_as_dict(profile.roles)
+            for role in roles_in_profile:
+                roles.add(role['name'])
         return list(roles)
 
         

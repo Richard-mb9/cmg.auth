@@ -49,6 +49,19 @@ class ProfilesService:
         if profile is None:
             raise NotFoundError('profile not found')
         return object_as_dict(profile.roles)
+    
+    def update_profile(self, profile_id: int, data_to_update: dict):
+        profile = self.read_by_id(profile_id)
+        roles_ids = data_to_update.get('roles_ids')
+        profile_name = data_to_update.get('name')
+        if profile_name and profile_name != profile.name:
+            if self.__profile_already_exists(profile_name):
+                ConflictError('there is already a profile with this name')
+            self.repository.update(profile_id, {'name': profile_name})
+        if roles_ids:
+            roles = self.roles_repository.read_by_id_in(roles_ids)
+            self.repository.update_roles(profile, roles)
+        
 
     def assign_to_roles(self, profile_id, data):
         """must receive a list of role ids, and associate them with the profile"""

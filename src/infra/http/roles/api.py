@@ -8,6 +8,7 @@ from src.security.security import roles_allowed
 from src.domain.services.roles_service import RolesService
 from src.utils.validator import validator
 from .validator import insert_rule_validator
+from .validator import update_rule_validator
 
 service = RolesService()
 
@@ -30,6 +31,15 @@ def create_rule():
 @roles_allowed('READ_ROLES', 'CREATE_ROLES')
 def list_roles():
     return jsonify(service.list())
+
+
+@app.route('/<rule_id>', methods=['PUT'])
+@roles_allowed('UPDATE_ROLES')
+def update_rule(rule_id):
+    data = loads(request.data)
+    validator(update_rule_validator, data)
+    service.update_role(rule_id, data)
+    return Response(status=HTTPStatus.NO_CONTENT)
 
 
 @app.route('/<rule_id>', methods=['DELETE'])

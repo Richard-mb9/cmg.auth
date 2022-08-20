@@ -68,6 +68,38 @@ paths:
       tags:
         - "Usuarios"
       summary: "Lista usuarios"
+      parameters:
+        - in: query
+          name: profiles
+          schema:
+            type: string
+          description: nomes dos perfis que os usuarios serão filtrados separados por virgula
+          example: ADMIN,BACKOFFICE
+        - in: query
+          name: email
+          schema:
+            type: string
+          description: email completo ou parte do email que sera feita a busca
+        - in: query
+          name: id
+          schema:
+            type: integer
+          description: id do usuario que sera feita a busca
+        - in: query
+          name: enable
+          schema:
+            type: boolean
+          description: busca por usuarios ativos ou inativos
+        - in: query
+          name: page_size
+          schema:
+            type: integer
+          description: quantidade maxima de items que espera que seja retornado, o valor default é 1000
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: pagina que deseja efetuar a busca, caso não seja enviado sera retornada a primeira pagina
       responses:
         200:
           description: "Listagem realizada com sucesso"

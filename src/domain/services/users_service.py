@@ -3,6 +3,7 @@ from http import HTTPStatus
 from flask import Response
 
 from src.utils.errors import ConflictError,BadRequestError, AccessDeniedError
+from src.domain.services.schemas.list_users_filters import ListUsersFilters
 from src.security.security import is_authenticated, has_role, has_profile
 
 from src.domain.models.users import Users
@@ -59,14 +60,11 @@ class UserService:
             BadRequestError('User Not Found')
         return user
 
-    def list_users(self):
-        users = self.repository.list()
-        return [{
-            'id': user.id,
-            'email': user.email,
-            'enable': user.enable,
-            'profiles': [profile.name for profile in user.profiles]
-        } for user in users]
+    def list_users(self, filters: ListUsersFilters):
+        profiles = filters.get('profiles')
+        if profiles:
+            filters['profiles'] = profiles.split(',')
+        return self.repository.list_users(filters)
     
     def update(self, user_id, data_to_update: dict):
         enable = data_to_update.get('enable')

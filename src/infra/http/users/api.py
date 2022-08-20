@@ -8,6 +8,7 @@ from json import loads
 from src.security.security import login_required, roles_allowed
 from src.domain.services.users_service import UserService
 from src.utils.validator import validator
+from src.utils.handlers import get_items_to_querys_from_request
 from src.security.security import roles_allowed
 from .validators import insert_user_validator
 from .validators import update_password_validator
@@ -34,7 +35,8 @@ def insert_user():
 @app.route('', methods=['GET'])
 @roles_allowed('READ_USERS')
 def list_users():
-    return jsonify(service.list_users())
+    filters = get_items_to_querys_from_request()
+    return jsonify(service.list_users(filters))
 
 
 @app.route('/<user_id>', methods=['PUT'])

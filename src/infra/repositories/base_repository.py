@@ -1,4 +1,6 @@
+from sqlalchemy.engine import Result
 from src.config import get_session
+
 
 class BaseRepository:
     def __init__(self, entity):
@@ -43,3 +45,15 @@ class BaseRepository:
     def read_by_id_in(self, ids: list):
         session = get_session()
         return session.query(self.entity).where(self.entity.id.in_(ids)).all()
+    
+    def format_search_query(self, result):
+        columns = [desc[0] for desc in result.cursor.description]
+        datas = []
+        for item in result:
+            i = 0
+            data = {}
+            for col in columns:
+                data[col] = item[i]
+                i += 1
+            datas.append(data)
+        return datas

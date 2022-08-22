@@ -7,9 +7,9 @@
     "test": "tests"
   },
   "scripts": {
-    "tests": "pytest --cov=./src --cov-report=html",
+    "tests": "env-cmd -f .env.test alembic upgrade head && pytest --cov=./src --cov-report=html",
     "redoc": "redoc-cli bundle swagger.yaml",
-    "build-postgres":"cd tests/db && docker-compose up -d",
+    "build-postgres": "cd tests/db && docker-compose up -d",
     "makemigrations": "alembic revision --autogenerate",
     "update-database": "alembic upgrade head"
   },
@@ -20,6 +20,7 @@
     "redoc-cli": "^0.13.10"
   },
   "dependencies": {
+    "env-cmd": "^10.1.0",
     "serverless-python-requirements": "^5.4.0",
     "serverless-wsgi": "^3.0.0"
   }

@@ -68,8 +68,6 @@ def app():
     app = create_app()
 
     yield app
-    import os
-    os.remove('file.db')
 
 
 @pytest.fixture

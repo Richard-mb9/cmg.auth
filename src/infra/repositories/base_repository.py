@@ -1,4 +1,3 @@
-from sqlalchemy.engine import Result
 from src.config import get_session
 
 
@@ -33,19 +32,18 @@ class BaseRepository:
             session.delete(entity)
         session.commit()
 
-
     def list(self):
         session = get_session()
         return session.query(self.entity).filter().all()
-    
+
     def read_by_id(self, id):
         session = get_session()
         return session.query(self.entity).filter_by(id=id).first()
-    
+
     def read_by_id_in(self, ids: list):
         session = get_session()
         return session.query(self.entity).where(self.entity.id.in_(ids)).all()
-    
+
     def format_search_query(self, result):
         columns = [desc[0] for desc in result.cursor.description]
         datas = []

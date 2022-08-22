@@ -17,22 +17,22 @@ class Client(FlaskClient):
             'profiles': ['ADMIN']
         }
 
-    def get(self, path: str, headers = {}, use_token = True):
+    def get(self, path: str, headers={}, use_token=True):
         if headers == {} and use_token:
             headers = {'authorization': f'Bearer {self.__generate_token()}'}
         return super().get(path, headers=headers)
-    
-    def post(self, path: str, data, headers = {}, use_token = True):
+
+    def post(self, path: str, data, headers={}, use_token=True):
         if headers == {} and use_token:
             headers = {'authorization': f'Bearer {self.__generate_token()}'}
-        return super().post(path,data=data, headers=headers)
-    
-    def put(self, path: str, data, headers = {}, use_token = True):
+        return super().post(path, data=data, headers=headers)
+
+    def put(self, path: str, data, headers={}, use_token=True):
         if headers == {} and use_token:
             headers = {'authorization': f'Bearer {self.__generate_token()}'}
-        return super().put(path,data=data, headers=headers)
-    
-    def delete(self, path: str, headers = {}, use_token = True):
+        return super().put(path, data=data, headers=headers)
+
+    def delete(self, path: str, headers={}, use_token=True):
         if headers == {} and use_token:
             headers = {'authorization': f'Bearer {self.__generate_token()}'}
         return super().delete(path, headers=headers)
@@ -43,11 +43,11 @@ class Client(FlaskClient):
         if isinstance(roles, list):
             self.token_data['roles'] = roles
         return self
-    
+
     def profile(self, profiles: list):
         self.token_data['profiles'] = profiles
         return self
-    
+
     def user_id(self, user_id):
         self.token_data['id'] = user_id
         return self
@@ -71,7 +71,7 @@ def app():
     import os
     os.remove('file.db')
 
-    
+
 @pytest.fixture
 def app_context(app):
     with app.app_context() as ctx:

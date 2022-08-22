@@ -21,6 +21,28 @@ insert_user_validator = {
     }
 }
 
+filter_users_validator = {
+    'profile': {
+        'type': 'string'
+    },
+    'email': {
+        'type': 'string'
+    },
+    'id': {
+        'type': 'string'
+    },
+    'enable': {
+        'type': 'string',
+        'allowed': ['false', 'true', 'all']
+    },
+    'page_size': {
+        'type': 'string'
+    },
+    'page': {
+        'type': 'string'
+    }
+}
+
 update_password_validator = {
     'old_password': {
         'type': 'string',
@@ -33,7 +55,7 @@ update_password_validator = {
 }
 
 update_user_profiles_validator = {
-    
+
     'profiles': {
         'type': 'list',
         'schema': {

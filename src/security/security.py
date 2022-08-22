@@ -23,7 +23,7 @@ def get_roles():
     token = get_token()
     if not token:
         return
-    
+
     jwt_payload = Auth().decodeToken(token)
     return jwt_payload.get('roles', [])
 
@@ -32,7 +32,7 @@ def get_profile():
     token = get_token()
     if not token:
         return
-    
+
     jwt_payload = Auth().decodeToken(token)
     return jwt_payload.get('profile')
 
@@ -78,7 +78,7 @@ def login_required(func):
             UnauthorizedError("token is required")
         try:
             Auth().decodeToken(token)
-        except Exception as error:
+        except Exception:
             return UnauthorizedError("token is invalid or expired")
         return func(*args, **kwargs)
     return decoretedFunction

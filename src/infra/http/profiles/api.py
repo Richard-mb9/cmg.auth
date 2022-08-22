@@ -7,13 +7,12 @@ from flask import jsonify
 from src.domain.services.profiles_service import ProfilesService
 from src.security.security import roles_allowed
 from src.utils.validator import validator
-from .validator import assign_to_rules_validator
 from .validator import insert_profile_validator
 from .validator import update_profile_validator
 
 service = ProfilesService()
 
-app = Blueprint('profiles',__name__)
+app = Blueprint('profiles', __name__)
 
 
 @app.route('/ping', methods=['GET'])

@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "pytest --cov=./src --cov-report=html",
+    "tests": "pytest --cov=./src --cov-report=html",
     "redoc": "redoc-cli bundle swagger.yaml",
     "build-postgres":"cd tests/db && docker-compose up -d",
     "makemigrations": "alembic revision --autogenerate",

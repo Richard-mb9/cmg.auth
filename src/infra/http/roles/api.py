@@ -12,7 +12,8 @@ from .validator import update_rule_validator
 
 service = RolesService()
 
-app = Blueprint('roles',__name__)
+app = Blueprint('roles', __name__)
+
 
 @app.route('/ping', methods=['GET'])
 def ping():

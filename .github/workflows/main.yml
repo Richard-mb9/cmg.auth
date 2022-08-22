@@ -4,13 +4,13 @@ on:
   push:
     branches:
       - master
-      - 'releases/**'
+      - "releases/**"
   pull_request:
     types:
       - closed
     branches:
       - master
-      - 'release/**'
+      - "release/**"
 
 jobs:
   deploy:
@@ -77,8 +77,8 @@ jobs:
       #  run: npm run build-postgres
 
       - name: Run tests
-        run: npm run test
-      
+        run: npm run tests
+
       - name: Run Redoc
         run: npm run redoc
 

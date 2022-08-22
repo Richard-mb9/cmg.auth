@@ -70,11 +70,11 @@ paths:
       summary: "Lista usuarios"
       parameters:
         - in: query
-          name: profiles
+          name: profile
           schema:
             type: string
-          description: nomes dos perfis que os usuarios serão filtrados separados por virgula
-          example: ADMIN,BACKOFFICE
+          description: nomes do perfil que os usuarios serão filtrados
+          example: ADMIN
         - in: query
           name: email
           schema:
@@ -189,7 +189,7 @@ paths:
           description: "A senha foi alterada com sucesso"
         400:
           description: "Algum parametro incorreto foi enviado, ou a senha antiga esta incorreta"
-  
+
   /profiles:
     get:
       tags:
@@ -214,7 +214,7 @@ paths:
             schema:
               type: object
               required:
-              - "name"
+                - "name"
               properties:
                 name:
                   type: string
@@ -264,7 +264,7 @@ paths:
                   items:
                     type: number
                     example: 1
-                    description: "ids das permissões que serão atribuidas ao perfil"
+                  description: "ids das permissões que serão atribuidas ao perfil"
       responses:
         204:
           description: "Perfil atualizado com sucesso"
@@ -274,7 +274,7 @@ paths:
           description: "O Usuario não ter permissão para atualziar perfis"
         404:
           description: "Não existe perfil cadastrado com o id enviado"
-              
+
     delete:
       tags:
         - "Perfis de usuarios"
@@ -291,7 +291,7 @@ paths:
           description: "Perfil excluido com sucesso"
         404:
           description: "Não existe perfil cadastrado com o id enviado"
-  
+
   /profiles/{profile_id}/roles:
     get:
       tags:
@@ -340,7 +340,7 @@ paths:
             schema:
               type: object
               required:
-              - "name"
+                - "name"
               properties:
                 name:
                   type: string
@@ -362,58 +362,56 @@ paths:
           description: "Já existe uma permissão cadastrada com o nome enviado"
         400:
           description: "foi enviado algum parametro incorreto no payload"
-  
+
   /roles/{role_id}:
     put:
       tags:
-          - "Permissões"
+        - "Permissões"
       summary: "Atualizar Permissões"
       parameters:
-      - in: path
-        name: role_id
-        schema:
-          type: integer
-        required: true
-        description: id da permissão que será Atualizada
+        - in: path
+          name: role_id
+          schema:
+            type: integer
+          required: true
+          description: id da permissão que será Atualizada
       requestBody:
         content:
           application/json:
             schema:
               type: object
               required:
-              - "name"
+                - "name"
               properties:
                 name:
                   type: string
                   example: "PERMISSAO_EXEMPLO"
                   description: "novo nome da permissão"
       responses:
-          204:
-            description: "Permissão atualizada com sucesso"
-          403:
-            description: "Usuario não tem permissão para atualizar permissões"
-          404:
-            description: "Não existe permissão cadastrada com o id enviado"
+        204:
+          description: "Permissão atualizada com sucesso"
+        403:
+          description: "Usuario não tem permissão para atualizar permissões"
+        404:
+          description: "Não existe permissão cadastrada com o id enviado"
 
     delete:
-        tags:
-          - "Permissões"
-        summary: "Deletar Permissões"
-        parameters:
+      tags:
+        - "Permissões"
+      summary: "Deletar Permissões"
+      parameters:
         - in: path
           name: role_id
           schema:
             type: integer
           required: true
           description: id da permissão que será excluida
-        responses:
-          204:
-            description: "Permissão excluida com sucesso"
-          404:
-            description: "Não existe permissão cadastrada com o id enviado"
+      responses:
+        204:
+          description: "Permissão excluida com sucesso"
+        404:
+          description: "Não existe permissão cadastrada com o id enviado"
 
-
-                
 components:
   schemas:
     auth:
@@ -510,7 +508,6 @@ components:
           example: "EXEMPLO_DE_PERMISSAO"
           description: "nome da permissão"
 
-    
     #Perfis
     profiles:
       type: "object"

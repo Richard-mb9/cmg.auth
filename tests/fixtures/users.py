@@ -4,7 +4,7 @@ from src.config import get_session
 from src.domain.models.users import Users
 from src.domain.services.users_service import UserService
 from src.infra.repositories.users_repository import UsersRepository
-from src.infra.repositories.profiles_repository import ProfilesRepository
+
 
 @pytest.fixture(scope='function')
 def users(profiles):
@@ -18,17 +18,17 @@ def users(profiles):
         repository.create(user)
         list_users.append(user) """
     for email in list:
-        user_data = {'email':email, 'password': '123456', 'profiles': ['USER']}
+        user_data = {'email': email, 'password': '123456', 'profiles': ['USER']}
         user_data = UserService().encode_password(user_data)
         list_profiles = session.query(Profiles).where(Profiles.name.in_(user_data['profiles'])).all()
         user = Users(
-            email=user_data['email'], 
+            email=user_data['email'],
             password=user_data['password'],
             profiles=list_profiles
         )
         session.add(user)
         list_users.append(user)
-    
+
     session.commit()
 
     yield

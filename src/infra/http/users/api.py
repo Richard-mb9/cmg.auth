@@ -9,19 +9,22 @@ from src.security.security import login_required, roles_allowed
 from src.domain.services.users_service import UserService
 from src.utils.validator import validator
 from src.utils.handlers import get_items_to_querys_from_request
-from src.security.security import roles_allowed
 from .validators import insert_user_validator
 from .validators import update_password_validator
 from .validators import update_user_profiles_validator
 from .validators import update_user_validator
+from .validators import filter_users_validator
 
 
 service = UserService()
 
-app = Blueprint('users',__name__)
+app = Blueprint('users', __name__)
+
 
 @app.route('/ping', methods=['GET'])
 def ping():
+    from src.config import is_testing
+    print(is_testing())
     return 'pong'
 
 
@@ -36,6 +39,7 @@ def insert_user():
 @roles_allowed('READ_USERS')
 def list_users():
     filters = get_items_to_querys_from_request()
+    validator(filter_users_validator, filters)
     return jsonify(service.list_users(filters))
 
 
@@ -63,4 +67,3 @@ def update_password(user_id):
     data = loads(request.data)
     validator(update_password_validator, data)
     return service.update_password(user_id, data)
-

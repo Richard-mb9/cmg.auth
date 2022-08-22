@@ -1,16 +1,10 @@
 import pytest
 from src.domain.models.roles import Roles
 from src.infra.repositories.roles_repository import RolesRepository
+from src.utils.enums.roles import RolesEnum
 
-roles_admin = [
-    'permissions management',
-    'PROFILES_MANAGEMENT',
-    'USER_MANAGEMENT',
-    'DELETE_PROFILES',
-    'DELETE_ROLES',
-    'CREATE_PROFILES',
-    'CREATE_ROLES'
-]
+roles_admin = [profile.value for profile in RolesEnum]
+
 
 @pytest.fixture(scope='function')
 def roles():
@@ -19,7 +13,7 @@ def roles():
     repository = RolesRepository()
     for name in list:
         role = Roles(name=name)
-        role =  repository.create(role)
+        role = repository.create(role)
         list_roles.append(role)
 
     yield list

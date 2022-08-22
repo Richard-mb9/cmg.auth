@@ -19,7 +19,6 @@ class RolesService:
         self.repository.create(role)
         self.__assign_role_to_admin_profile(role.id)
         return {'id': role.id}
-    
 
     def update_role(self, role_id, data: dict):
         name = data.get('name')
@@ -43,16 +42,14 @@ class RolesService:
             NotFoundError('role not found')
         return role
 
-
     def __role_already_exists(self, name):
         roles = self.repository.read_by_name(name)
         return roles is not None and len(roles) > 0
 
-    
     def __assign_role_to_admin_profile(self, role_id):
         """assign the new permission to the admin profile"""
         profile = self.profiles_repository.read_by_name('ADMIN')
-        if not profile:
+        if not profile:  # pragma: no cover
             profile = Profiles(name='ADMIN')
             self.profiles_repository.create(profile)
         ProfilesService().assign_to_roles(profile.id, {'roles_ids': [role_id]})

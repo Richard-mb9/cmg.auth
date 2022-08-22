@@ -70,9 +70,9 @@ jobs:
             ${{ runner.os }}-
       - name: Install Node dependencies (specifically, serverless-python-requirements)
         run: npm install
-      
+
       - name: Run tests
-        run: npm run test
+        run: npm run tests
 
       - name: Run Redoc
         run: npm run redoc

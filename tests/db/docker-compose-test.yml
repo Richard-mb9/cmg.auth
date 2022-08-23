@@ -6,8 +6,8 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=cmg-auth-test
-    expose:
-      - "5432"
     ports:
       - "5432:5432"
+    networks:
+      - host
   

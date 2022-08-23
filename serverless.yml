@@ -1,10 +1,10 @@
 service: auth
 
-frameworkVersion: '3'
+frameworkVersion: "3"
 
 provider:
   name: aws
-  runtime: python3.6
+  runtime: python3.8
   stage: ${env:ENVIRONMENT}
   region: us-east-2
   #vpc:
@@ -15,19 +15,16 @@ provider:
   #    - subnet-0fac506d1fede091d
   #    - subnet-02322f8a56640ad81
 
-
 plugins:
   - serverless-python-requirements
   - serverless-wsgi
 package:
   individually: true
 
-
 custom:
   wsgi:
     app: app.app
     packRequirements: false
-
 
 functions:
   auth:

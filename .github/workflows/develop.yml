@@ -20,7 +20,7 @@ jobs:
     strategy:
       matrix:
         python-version:
-          - 3.6 # with a build matrix, you can specify a list of python versions to deploy with
+          - 3.8 # with a build matrix, you can specify a list of python versions to deploy with
 
     services:
       postgres:

@@ -8,6 +8,10 @@ info:
 servers:
   - url: http://localhost:5000
     description: Ambiente local
+    - url: https://3y2qm56poj.execute-api.us-east-2.amazonaws.com/dev
+    description: Ambiente de desenvolvimento
+    - url: https://mkxjae8yh5.execute-api.us-east-2.amazonaws.com/prd
+    description: Ambiente de produção
 
 paths:
   /auth:

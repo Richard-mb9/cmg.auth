@@ -20,9 +20,7 @@ def get_db_url():
     user_db = config('USER_DB', default=None)
     database = config('NAME_DB', default=None)
     port_db = int(config('PORT_DB', default=None))
-    url = f'postgresql+psycopg2://{user_db}:{password_db}@{host_db}:{port_db}/{database}'
-    print(url)
-    return url
+    return f'postgresql+psycopg2://{user_db}:{password_db}@{host_db}:{port_db}/{database}'
 
 
 def get_engine():

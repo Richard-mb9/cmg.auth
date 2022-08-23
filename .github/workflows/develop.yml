@@ -72,7 +72,7 @@ jobs:
         run: npm install
 
       - name: Build docker for tests
-        run: docker-compose -f ./tests/db/docker-compose-test.yml up -d
+        run: docker-compose -f ./tests/db/docker-compose-test.yml up -d -p 5432:5432
 
       - name: Run tests
         run: npm run tests

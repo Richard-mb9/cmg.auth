@@ -21,6 +21,18 @@ jobs:
       matrix:
         python-version:
           - 3.6 # with a build matrix, you can specify a list of python versions to deploy with
+
+    services:
+  postgres:
+    image: postgres
+    env:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: cmg-auth-test
+    ports:
+      - 5432:5432
+    options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
     steps:
       # --------- use Python to install Python dependencies and run linter, tests, etc. ---------
       - uses: actions/checkout@v2
@@ -71,14 +83,14 @@ jobs:
       - name: Install Node dependencies (specifically, serverless-python-requirements)
         run: npm install
 
-      - name: Build docker for tests
-        run: docker-compose -f ./tests/db/docker-compose-test.yml up -d
+      #- name: Build docker for tests
+      #  run: docker-compose -f ./tests/db/docker-compose-test.yml up -d
 
       - name: Run tests
         run: npm run tests
 
-      - name: taking down docker for tests
-        run: docker-compose -f ./tests/db/docker-compose-test.yml down
+      #- name: taking down docker for tests
+      #  run: docker-compose -f ./tests/db/docker-compose-test.yml down
 
       - name: Run Redoc
         run: npm run redoc

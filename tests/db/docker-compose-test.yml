@@ -7,5 +7,5 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=cmg-auth-test
     ports:
-      - "5432:15432"
+      - "5432:5432"
   

@@ -25,6 +25,7 @@ def get_db_url():
 
 def get_engine():
     url_db = get_db_url()
+    print(url_db)
     return create_engine(url_db)
 
 

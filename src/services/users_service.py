@@ -3,10 +3,10 @@ from http import HTTPStatus
 from flask import Response
 
 from src.utils.errors import ConflictError, BadRequestError, AccessDeniedError
-from src.domain.services.schemas.list_users_filters import ListUsersFilters
+from src.services.schemas.list_users_filters import ListUsersFilters
 from src.security.security import is_authenticated, has_profile
 
-from src.domain.models.users import Users
+from src.domain.users import Users
 from src.infra.repositories.users_repository import UsersRepository
 from src.infra.repositories.profiles_repository import ProfilesRepository
 

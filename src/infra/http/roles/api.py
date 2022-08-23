@@ -5,7 +5,7 @@ from http import HTTPStatus
 from flask import jsonify
 
 from src.security.security import roles_allowed
-from src.domain.services.roles_service import RolesService
+from src.services.roles_service import RolesService
 from src.utils.validator import validator
 from .validator import insert_rule_validator
 from .validator import update_rule_validator

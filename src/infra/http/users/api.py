@@ -6,7 +6,7 @@ from json import loads
 
 
 from src.security.security import login_required, roles_allowed
-from src.domain.services.users_service import UserService
+from src.services.users_service import UserService
 from src.utils.validator import validator
 from src.utils.handlers import get_items_to_querys_from_request
 from .validators import insert_user_validator

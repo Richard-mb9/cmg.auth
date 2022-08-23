@@ -1,5 +1,5 @@
 import pytest
-from src.domain.models.roles import Roles
+from src.domain.roles import Roles
 from src.infra.repositories.roles_repository import RolesRepository
 from src.utils.enums.roles import RolesEnum
 
@@ -21,5 +21,5 @@ def roles():
     for item in list_roles:
         try:
             repository.delete(item.id)
-        except:
+        except Exception:
             continue

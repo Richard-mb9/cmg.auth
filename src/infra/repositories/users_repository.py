@@ -2,8 +2,8 @@ from typing import List
 from src.infra.repositories.base_repository import BaseRepository
 from src.infra.repositories.schemas.list_users_response import ListUsersResponse
 from src.config import get_session
-from src.domain.models.users import Users
-from src.domain.models.profiles import Profiles
+from src.domain.users import Users
+from src.domain.profiles import Profiles
 
 
 class UsersRepository(BaseRepository):

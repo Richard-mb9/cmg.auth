@@ -1,6 +1,6 @@
 from src.utils.errors import ConflictError, NotFoundError
-from src.domain.models.roles import Roles
-from src.domain.models.profiles import Profiles
+from src.domain.roles import Roles
+from src.domain.profiles import Profiles
 from src.utils.handlers import object_as_dict
 from .profiles_service import ProfilesService
 from src.infra.repositories.roles_repository import RolesRepository

@@ -2,8 +2,7 @@ from flask import Response
 from http import HTTPStatus
 
 from src.utils.errors import ConflictError, NotFoundError
-from src.domain.models.profiles import Profiles
-from src.domain.models.roles import Roles
+from src.domain.profiles import Profiles
 from src.infra.repositories.profiles_repository import ProfilesRepository
 from src.infra.repositories.roles_repository import RolesRepository
 from src.utils.handlers import object_as_dict

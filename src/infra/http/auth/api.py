@@ -4,9 +4,10 @@ from flask import jsonify
 from .validators import login_validator
 
 from src.utils.validator import validator
-from src.domain.services.auth_service import AuthService
+from src.services.auth_service import AuthService
 
 app = Blueprint('auth', __name__)
+
 
 @app.route('', methods=['POST'])
 def login():

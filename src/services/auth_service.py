@@ -3,10 +3,10 @@ from src.utils.handlers import object_as_dict
 from src.utils.errors import BadRequestError
 from src.security.Auth import Auth
 
-from src.domain.services.users_service import UserService
-from src.domain.services.profiles_service import ProfilesService
-from src.domain.models.users import Users
-from src.domain.models.profiles import Profiles
+from src.services.users_service import UserService
+from src.domain.users import Users
+from src.domain.profiles import Profiles
+
 
 class AuthService:
     def login(self, data):
@@ -27,7 +27,6 @@ class AuthService:
             'token_type': 'Bearer'
         }
 
-
     def get_roles(self, profiles: List[Profiles]):
         roles = set()
         for profile in profiles:
@@ -35,5 +34,3 @@ class AuthService:
             for role in roles_in_profile:
                 roles.add(role['name'])
         return list(roles)
-
-        

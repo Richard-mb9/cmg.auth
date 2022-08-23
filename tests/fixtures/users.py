@@ -1,8 +1,8 @@
 import pytest
-from src.domain.models.profiles import Profiles
+from src.domain.profiles import Profiles
 from src.config import get_session
-from src.domain.models.users import Users
-from src.domain.services.users_service import UserService
+from src.domain.users import Users
+from src.services.users_service import UserService
 from src.infra.repositories.users_repository import UsersRepository
 
 
@@ -36,5 +36,5 @@ def users(profiles):
     for item in list_users:
         try:
             repository.delete(item.id)
-        except:
+        except Exception:
             continue

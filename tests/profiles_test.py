@@ -3,8 +3,6 @@ from json import dumps, loads
 
 from .fixtures.app import Client
 
-from src.domain.models.roles import Roles
-from src.domain.models.profiles import Profiles
 from src.infra.repositories.roles_repository import RolesRepository
 from src.infra.repositories.profiles_repository import ProfilesRepository
 
@@ -51,7 +49,7 @@ def test_list_roles_from_profiles(client: Client, profiles, roles):
 
 
 def test_fail_list_roles_from_profiles_not_existis(client: Client, profiles, roles):
-    response = client.get(f'/profiles/0/roles')
+    response = client.get('/profiles/0/roles')
     assert response.status_code == HTTPStatus.NOT_FOUND
 
 
@@ -79,7 +77,7 @@ def test_update_profile_name(client: Client, profiles, roles):
             assert profile['name'] == new_name
             found_profile = True
 
-    assert found_profile == True
+    assert found_profile is True
 
 
 def test_fail_update_two_equal_profile_names(client: Client):

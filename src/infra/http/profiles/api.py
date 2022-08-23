@@ -4,7 +4,7 @@ from json import loads
 from http import HTTPStatus
 from flask import jsonify
 
-from src.domain.services.profiles_service import ProfilesService
+from src.services.profiles_service import ProfilesService
 from src.security.security import roles_allowed
 from src.utils.validator import validator
 from .validator import insert_profile_validator

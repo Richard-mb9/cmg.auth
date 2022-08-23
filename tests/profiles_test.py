@@ -108,7 +108,7 @@ def test_assign_roles_in_profile(client: Client, profiles, roles):
     profile = ProfilesRepository().read_by_id(profile_id)
     roles_in_profile = profile.roles
     assert len(roles_in_profile) == 1
-    assert roles_in_profile[0].id == profile_id
+    assert roles_in_profile[0].id == role_id
 
 
 def test_unassign_role_in_profile(client: Client, profiles, roles):

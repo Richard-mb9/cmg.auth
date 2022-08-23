@@ -34,7 +34,7 @@ def get_profile():
         return
 
     jwt_payload = Auth().decodeToken(token)
-    return jwt_payload.get('profile')
+    return jwt_payload.get('profiles', [])
 
 
 def has_role(roles):

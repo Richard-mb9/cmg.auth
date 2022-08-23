@@ -5,25 +5,22 @@ from src.infra.http.routes import create_routes
 
 from src.config import Base, get_engine
 
-def load_environ():
-    from dotenv import find_dotenv, load_dotenv
-    env = find_dotenv('.env.local')
-    load_dotenv(env)
 
 def create_app():
     app = Flask(__name__)
     CORS(app)
-    
+
     create_routes(app)
-    load_environ()
     return app
+
 
 app = create_app()
 
+
 @app.route('/docs')
-def docs(): # pragma: no cover
+def docs():  # pragma: no cover
     import os
     from flask import Response
     path = os.path.abspath('redoc-static.html')
-    arq = open(path,'r')
+    arq = open(path, 'r')
     return Response(response=arq)

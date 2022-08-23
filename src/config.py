@@ -4,6 +4,7 @@ from sqlalchemy.orm import sessionmaker, Session as SessionType
 from flask import current_app
 from decouple import config
 from distutils.util import strtobool
+from dotenv import load_dotenv, find_dotenv
 
 
 def is_testing():
@@ -11,6 +12,9 @@ def is_testing():
 
 
 def get_db_url():
+    if is_testing():
+        env = find_dotenv('.env.test')
+        load_dotenv(env)
     host_db = config('HOST_DB', default=None)
     password_db = config('PASSWORD_DB', default=None)
     user_db = config('USER_DB', default=None)

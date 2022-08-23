@@ -6,17 +6,9 @@ services:
       context: ./
       dockerfile: dockerfile
     environment:
-      POSTGRES_USER: login
-      POSTGRES_PASSWORD: login
-      POSTGRES_DB: cmg_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: cmg-auth-test
     ports:
       - 5432:5432
-networks:
-  default:
-    ipam:
-      config:
-        - subnet: 10.10.10.0/24
-          #gateway: 10.10.10.1
-    driver_opts:
-      com.docker.network.bridge.name: br_dock_iptou
   

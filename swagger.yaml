@@ -64,12 +64,120 @@ paths:
           description: "Já existe um usuario cadastrado com o email enviado"
         400:
           description: "foi enviado algum parametro incorreto no payload"
+    get:
+      tags:
+        - "Usuarios"
+      summary: "Lista usuarios"
+      parameters:
+        - in: query
+          name: profile
+          schema:
+            type: string
+          description: nomes do perfil que os usuarios serão filtrados
+          example: ADMIN
+        - in: query
+          name: email
+          schema:
+            type: string
+          description: email completo ou parte do email que sera feita a busca
+        - in: query
+          name: id
+          schema:
+            type: integer
+          description: id do usuario que sera feita a busca
+        - in: query
+          name: enable
+          schema:
+            type: boolean
+          description: busca por usuarios ativos ou inativos
+        - in: query
+          name: page_size
+          schema:
+            type: integer
+          description: quantidade maxima de items que espera que seja retornado, o valor default é 1000
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: pagina que deseja efetuar a busca, caso não seja enviado sera retornada a primeira pagina
+      responses:
+        200:
+          description: "Listagem realizada com sucesso"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/user"
+        403:
+          description: "Você não tem permissão para listar usuarios"
+
+  /users/{user_id}:
+    put:
+      tags:
+        - "Usuarios"
+      summary: "Atualiza um usuario"
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: integer
+          required: true
+          description: id do usuario
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                enable:
+                  type: string
+                  example: false
+                  description: Flag que indica se o usuario esta ativo
+      responses:
+        204:
+          description: "A Usuario alterado com sucesso"
+        400:
+          description: "Algum parametro incorreto foi enviado, ou a senha antiga esta incorreta"
+        403:
+          description: "Usuario não tem permissão para atualizar outros usuarios"
+
+  /users/{user_id}/profiles:
+    put:
+      tags:
+        - "Usuarios"
+      summary: "Altera os Perfis de determinado usuario"
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: integer
+          required: true
+          description: id do usuario
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/users-update-profiles"
+      responses:
+        204:
+          description: "A Usuario alterado com sucesso"
+        400:
+          description: "Algum parametro incorreto foi enviado, ou a senha antiga esta incorreta"
 
   /users/{user_id}/update-password:
     put:
       tags:
         - "Usuarios"
       summary: "Atualizar a senha do usuario"
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: integer
+          required: true
+          description: id do usuario que esta tentando alterar a senha
       requestBody:
         content:
           application/json:
@@ -82,46 +190,11 @@ paths:
         400:
           description: "Algum parametro incorreto foi enviado, ou a senha antiga esta incorreta"
 
-  /users/{user_id}/groups/assign:
-    post:
-      tags:
-        - "Usuarios"
-      summary: "Atribuir um grupo ao usuario"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              allOf:
-                - $ref: "#/components/schemas/user-assign-groups"
-      responses:
-        204:
-          description: "O Grupo foi atribuido ao usuario com sucesso"
-        400:
-          description: "Algum parametro incorreto foi enviado no payload"
-
-  /users/{user_id}/groups/unassign:
-    post:
-      tags:
-        - "Usuarios"
-      summary: "Remover um grupo do usuario"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              allOf:
-                - $ref: "#/components/schemas/user-assign-groups"
-      responses:
-        204:
-          description: "O Grupo foi removido com sucesso do usuario"
-        400:
-          description: "Algum parametro incorreto foi enviado no payload"
-  
-
-  /groups:
+  /profiles:
     get:
       tags:
-        - "Grupos de usuarios"
-      summary: "Listar os grupos cadastrados"
+        - "Perfis de usuarios"
+      summary: "Listar os perfis cadastrados"
       responses:
         200:
           description: "Listagem realizada com sucesso"
@@ -130,26 +203,26 @@ paths:
               schema:
                 type: "array"
                 items:
-                  $ref: "#/components/schemas/groups"
+                  $ref: "#/components/schemas/profiles"
     post:
       tags:
-        - "Grupos de usuarios"
-      summary: "Criar um novo grupo de usuarios"
+        - "Perfis de usuarios"
+      summary: "Criar um novo perfil de usuarios"
       requestBody:
         content:
           application/json:
             schema:
               type: object
               required:
-              - "name"
+                - "name"
               properties:
                 name:
                   type: string
-                  example: "grupo de exemplo"
-                  description: "Nome do grupo que sera criado"
+                  example: "perfil de exemplo"
+                  description: "Nome do perfil que sera criado"
       responses:
         201:
-          description: "Grupo criado com sucesso"
+          description: "Perfil criado com sucesso"
           content:
             application/json:
               schema:
@@ -157,60 +230,96 @@ paths:
                 properties:
                   id:
                     type: "number"
-                    description: "id do grupo criado"
+                    description: "id do perfil criado"
                     example: 1
         409:
-          description: "Já existe um grupo cadastrado com o nome enviado"
+          description: "Já existe um perfil cadastrado com o nome enviado"
         400:
           description: "foi enviado algum parametro incorreto no payload"
-  /groups/{group_id}:
+
+  /profiles/{profile_id}:
+    put:
+      tags:
+        - "Perfis de usuarios"
+      summary: "Atualizar um perfil"
+      parameters:
+        - in: path
+          name: profile_id
+          schema:
+            type: integer
+          required: true
+          description: id do perfil
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "PERFIL_EXEMPLO"
+                  description: "novo nome do perfil"
+                roles_ids:
+                  type: array
+                  items:
+                    type: number
+                    example: 1
+                  description: "ids das permissões que serão atribuidas ao perfil"
+      responses:
+        204:
+          description: "Perfil atualizado com sucesso"
+        401:
+          description: "Necessario autenticação"
+        403:
+          description: "O Usuario não ter permissão para atualziar perfis"
+        404:
+          description: "Não existe perfil cadastrado com o id enviado"
+
     delete:
       tags:
-        - "Grupos de usuarios"
-      summary: "Deletar um grupo"
+        - "Perfis de usuarios"
+      summary: "Deletar um perfil"
+      parameters:
+        - in: path
+          name: profile_id
+          schema:
+            type: integer
+          required: true
+          description: id do perfil de usuario que sera excluido
       responses:
         204:
-          description: "Grupo excluido com sucesso"
+          description: "Perfil excluido com sucesso"
         404:
-          description: "Não existe grupo cadastrado com o id enviado"
-  /groups/{group_id}/roles/assign:
-    post:
-      tags:
-        - "Grupos de usuarios"
-      summary: "Atribuir uma permissão ao grupo"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              allOf:
-                - $ref: "#/components/schemas/groups-assign-roles"
-      responses:
-        204:
-          description: "A Permissão foi atribuida ao grupo com sucesso"
-        400:
-          description: "Algum parametro incorreto foi enviado no payload"
-  /groups/{group_id}/roles/unassign:
-    post:
-      tags:
-        - "Grupos de usuarios"
-      summary: "Remover uma permissão do grupo"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              allOf:
-                - $ref: "#/components/schemas/groups-assign-roles"
-      responses:
-        204:
-          description: "A Permissão foi remida do grupo com secesso"
-        400:
-          description: "Algum parametro incorreto foi enviado no payload"
+          description: "Não existe perfil cadastrado com o id enviado"
 
+  /profiles/{profile_id}/roles:
+    get:
+      tags:
+        - "Perfis de usuarios"
+      summary: "Listar as permissões de determinado perfil"
+      parameters:
+        - in: path
+          name: profile_id
+          schema:
+            type: integer
+          required: true
+          description: id do perfil de usuario que sera exibido
+      responses:
+        200:
+          description: "Listagem realizada com sucesso"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/roles"
+        404:
+          description: "Não existe perfil cadastrado com o id enviado"
 
   /roles:
     get:
       tags:
-        - "Permissoes"
+        - "Permissões"
       summary: "Lista as permissões cadastradas"
       responses:
         200:
@@ -223,7 +332,7 @@ paths:
                   $ref: "#/components/schemas/roles"
     post:
       tags:
-        - "Permissoes"
+        - "Permissões"
       summary: "Criar uma nova permissão"
       requestBody:
         content:
@@ -231,7 +340,7 @@ paths:
             schema:
               type: object
               required:
-              - "name"
+                - "name"
               properties:
                 name:
                   type: string
@@ -253,20 +362,56 @@ paths:
           description: "Já existe uma permissão cadastrada com o nome enviado"
         400:
           description: "foi enviado algum parametro incorreto no payload"
-  
+
   /roles/{role_id}:
+    put:
+      tags:
+        - "Permissões"
+      summary: "Atualizar Permissões"
+      parameters:
+        - in: path
+          name: role_id
+          schema:
+            type: integer
+          required: true
+          description: id da permissão que será Atualizada
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - "name"
+              properties:
+                name:
+                  type: string
+                  example: "PERMISSAO_EXEMPLO"
+                  description: "novo nome da permissão"
+      responses:
+        204:
+          description: "Permissão atualizada com sucesso"
+        403:
+          description: "Usuario não tem permissão para atualizar permissões"
+        404:
+          description: "Não existe permissão cadastrada com o id enviado"
+
     delete:
-        tags:
-          - "Permissoes"
-        summary: "Deletar Permissões"
-        responses:
-          204:
-            description: "Permissão excluida com sucesso"
-          404:
-            description: "Não existe permissão cadastrada com o id enviado"
+      tags:
+        - "Permissões"
+      summary: "Deletar Permissões"
+      parameters:
+        - in: path
+          name: role_id
+          schema:
+            type: integer
+          required: true
+          description: id da permissão que será excluida
+      responses:
+        204:
+          description: "Permissão excluida com sucesso"
+        404:
+          description: "Não existe permissão cadastrada com o id enviado"
 
-
-                
 components:
   schemas:
     auth:
@@ -288,15 +433,53 @@ components:
       required:
         - "email"
         - "password"
+        - "profiles"
       properties:
         email:
           type: string
           example: "Jão@gmail.com"
           description: "email do usuario"
+        profiles:
+          type: array
+          example: ["STORE", "MANAGER"]
+          description: "Perfis do usuario"
+          items:
+            type: string
+            enum:
+              - "USER"
+              - "ADMIN"
+              - "BACKOFFICE"
+              - "STORE"
+              - "MANAGER"
+              - "TABLE"
+              - "WAITER"
+              - "KITCHEN"
+              - "CASH_OPERATOR"
         password:
           type: string
           example: "123456789"
           description: "senha"
+    users-update-profiles:
+      type: object
+      required:
+        - "profiles"
+      properties:
+        profiles:
+          type: array
+          example: ["STORE", "MANAGER"]
+          description: "Perfis do usuario"
+          items:
+            type: string
+            enum:
+              - "USER"
+              - "ADMIN"
+              - "BACKOFFICE"
+              - "STORE"
+              - "MANAGER"
+              - "TABLE"
+              - "WAITER"
+              - "KITCHEN"
+              - "CASH_OPERATOR"
     update-password:
       type: object
       required:
@@ -311,17 +494,6 @@ components:
           type: string
           example: "#123!abc"
           description: "nova senha"
-    user-assign-groups:
-      type: object
-      required:
-        - "groups_ids"
-      properties:
-        groups_ids:
-          type: array
-          items:
-            type: number
-            example: 1
-            description: "ids dos grupos que serão atribuidos ao usuario"
 
     #Permissões
     roles:
@@ -333,23 +505,22 @@ components:
           description: "id da permissão"
         name:
           type: string
-          example: 1
+          example: "EXEMPLO_DE_PERMISSAO"
           description: "nome da permissão"
 
-    
-    #Grupos
-    groups:
+    #Perfis
+    profiles:
       type: "object"
       properties:
         id:
           type: number
-          example: 1
-          description: "id da do grupo"
+          example: 5
+          description: "id da do perfil"
         name:
           type: string
-          example: 1
-          description: "nome do grupo"
-    groups-assign-roles:
+          example: "STORE"
+          description: "nome do perfil"
+    profiles-assign-roles:
       type: object
       required:
         - "roles_ids"
@@ -359,4 +530,30 @@ components:
           items:
             type: number
             example: 1
-            description: "ids das permissões que serão atribuidas ao grupo"
+            description: "ids das permissões que serão atribuidas ao perfil"
+    user:
+      type: object
+      required:
+        - "id"
+        - "email"
+        - "profiles"
+        - "enabed"
+      properties:
+        id:
+          type: integer
+          example: 1
+          description: id do usuario
+        email:
+          type: string
+          example: user@hotmail.com
+          description: email do usuario
+        profiles:
+          type: array
+          items:
+            type: string
+          description: lista que contem os perfis do usuario
+          example: ["STORE", "MANAGER"]
+        enabled:
+          type: boolean
+          example: true
+          description: flag que indica se o usuario esta ativo

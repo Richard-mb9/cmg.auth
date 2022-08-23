@@ -4,13 +4,13 @@ on:
   push:
     branches:
       - master
-      - 'releases/**'
+      - "releases/**"
   pull_request:
     types:
       - closed
     branches:
       - master
-      - 'release/**'
+      - "release/**"
 
 jobs:
   deploy:
@@ -72,10 +72,13 @@ jobs:
             ${{ runner.os }}-
       - name: Install Node dependencies (specifically, serverless-python-requirements)
         run: npm install
-      
+
+      #- name: build docker
+      #  run: npm run build-postgres
+
       - name: Run tests
-        run: npm run test
-      
+        run: npm run tests
+
       - name: Run Redoc
         run: npm run redoc
 

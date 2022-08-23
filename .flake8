@@ -1,0 +1,3 @@
+[flake8]
+exclude = ./.tox/*,./build/*,./docs/conf.py,.env,./tests/conftest.py
+max-line-length = 120

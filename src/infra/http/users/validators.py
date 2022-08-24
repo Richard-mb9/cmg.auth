@@ -16,8 +16,7 @@ insert_user_validator = {
         'schema': {
             'type': 'string',
         },
-        'required': True,
-        'allowed': [profile.value for profile in ProfilesEnum]
+        'required': True
     }
 }
 

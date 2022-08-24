@@ -5,6 +5,7 @@ from src.utils.errors import ConflictError, NotFoundError
 from src.domain.profiles import Profiles
 from src.infra.repositories.profiles_repository import ProfilesRepository
 from src.infra.repositories.roles_repository import RolesRepository
+from src.domain.roles import Roles
 from src.utils.handlers import object_as_dict
 
 
@@ -16,7 +17,12 @@ class ProfilesService:
     def create_profile(self, data):
         if self.__profile_already_exists(data['name']):
             ConflictError('there is already a profile with this name')
-        profile = Profiles(name=data['name'])
+        role_id = None
+        if data.get('role_name') is not None:
+            role = Roles(name=data['role_name'])
+            self.roles_repository.create(role)
+            role_id = role.id
+        profile = Profiles(name=data['name'], role_id=role_id)
         self.repository.create(profile)
         return {'id': profile.id}
 

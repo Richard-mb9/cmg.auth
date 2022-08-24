@@ -1,9 +1,7 @@
-from flask import Flask, render_template
+from flask import Flask
 from flask_cors import CORS
 
 from src.infra.http.routes import create_routes
-
-from src.config import Base, get_engine
 
 
 def create_app():

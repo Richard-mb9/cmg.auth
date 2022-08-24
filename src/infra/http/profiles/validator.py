@@ -3,6 +3,9 @@ insert_profile_validator = {
         'type': 'string',
         'required': True
     },
+    'role_name': {
+        'type': 'string',
+    }
 }
 
 update_profile_validator = {

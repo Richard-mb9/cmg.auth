@@ -15,6 +15,9 @@ def get_db_url():
     if is_testing():
         env = find_dotenv('.env.test')
         load_dotenv(env)
+    else:
+        env = find_dotenv('.env.local')
+        load_dotenv(env)
     host_db = config('HOST_DB', default=None)
     password_db = config('PASSWORD_DB', default=None)
     user_db = config('USER_DB', default=None)

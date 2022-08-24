@@ -33,6 +33,22 @@ def test_fail_create_two_users_with_the_same_email(client: Client, profiles):
     assert response.status_code == HTTPStatus.CONFLICT
 
 
+def test_fail_create_without_role_for_create_profile(client: Client, profiles):
+    data = dumps({'name': 'PROFILE', 'role_name': 'CREATE_USER_WITH_PROFILE'})
+    client.post('/profiles', data=data)
+    data = dumps({'email': 'teste@teste.com', 'password': '123456', 'profiles': ['PROFILE']})
+    client.roles('WITHOUT_ROLE').post('/users', data=data)
+    response = client.post('/users', data=data)
+    assert response.status_code == HTTPStatus.FORBIDDEN
+
+
+def test_fail_create_user_with_invalid_profile(client: Client, profiles):
+    data = dumps({'email': 'teste@teste.com', 'password': '123456', 'profiles': ['INVALID']})
+    client.roles('WITHOUT_ROLE').post('/users', data=data)
+    response = client.post('/users', data=data)
+    assert response.status_code == HTTPStatus.NOT_FOUND
+
+
 def test_fail_update_password_with_incorrect_old_password(client: Client, users):
     data = dumps({'email': 'teste2@teste.com', 'password': '12345678', 'profiles': ['USER']})
     response = client.post('/users', data=data)
@@ -59,7 +75,7 @@ def test_fail_update_password_with_incorrect_parameters(client: Client, users):
     assert response.status_code == HTTPStatus.BAD_REQUEST
 
 
-def test_update_password(client: Client):
+def test_update_password(client: Client, profiles):
     data = dumps({'email': 'teste2@teste.com', 'password': '123456', 'profiles': ['USER']})
     response = client.post('/users', data=data)
     id = loads(response.data)['id']
@@ -69,7 +85,7 @@ def test_update_password(client: Client):
     assert response.status_code == HTTPStatus.NO_CONTENT
 
 
-def test_update_user(client: Client):
+def test_update_user(client: Client, profiles):
     data = dumps({'email': 'teste2@teste.com', 'password': '123456', 'profiles': ['USER']})
     response = client.post('/users', data=data)
     user_id = response.json['id']
@@ -111,7 +127,7 @@ def test_update_user_profiles(client: Client, users, profiles):
     assert found_profile_2 is True
 
 
-def test_filter_user_by_id(client: Client):
+def test_filter_user_by_id(client: Client, profiles):
     data = dumps({'email': 'teste2@teste.com', 'password': '123456', 'profiles': ['USER']})
     response = client.post('/users', data=data)
     user_id = response.json['id']
@@ -122,7 +138,7 @@ def test_filter_user_by_id(client: Client):
     assert response.json[0]['id'] == user_id
 
 
-def test_filter_user_by_email(client: Client):
+def test_filter_user_by_email(client: Client, profiles):
     email = 'teste2@teste.com'
     data = dumps({'email': email, 'password': '123456', 'profiles': ['USER']})
     response = client.post('/users', data=data)

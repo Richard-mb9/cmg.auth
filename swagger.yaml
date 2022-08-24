@@ -38,7 +38,9 @@ paths:
                     description: "Token gerado valido por 24 horas"
                     example: "seuTokenViraAquiComoUmaGrandeString"
         400:
-          description: "foi enviado algum parametro incorreto no payload, ou as credenciais estão incorretas"
+          description: "foi enviado algum parametro incorreto no payload, ou as credenciais estão incorretas, ou o usuario esta inativo"
+        403:
+          description: "usuario esta bloqueado"
 
   #usuarios
   /users:

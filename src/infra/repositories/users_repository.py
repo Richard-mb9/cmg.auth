@@ -16,13 +16,9 @@ class UsersRepository(BaseRepository):
         session.commit()
         return user
 
-    def read_by_email(self, email):
+    def read_by_email(self, email) -> Users:
         session = get_session()
-        return session.query(self.entity).filter_by(email=email).all()
-
-    def read_by_email_and_password(self, email, password):
-        session = get_session()
-        return session.query(self.entity).filter_by(email=email, password=password).first()
+        return session.query(self.entity).filter_by(email=email).first()
 
     def update_profiles(self, user_id, profiles_names: List[str]):
         session = get_session()
@@ -31,7 +27,7 @@ class UsersRepository(BaseRepository):
         user.profiles = profiles
         session.commit()
 
-    def list_users(self, filters: dict = {}) -> ListUsersResponse:
+    def list_users(self, filters: dict = {}) -> List[ListUsersResponse]:
         page = int(filters.get('page', 1))
         page_size = int(filters.get('page_size', 99999999999999))
         enable = filters.get('enable')
@@ -50,15 +46,13 @@ class UsersRepository(BaseRepository):
             select u.id, u.email, pr.profiles, u."enable"
             from users u
             left join (
-                select up.user_id as id, array_agg(p.name) as profiles 
+                select up.user_id as id, array_agg(p.name) as profiles
                 from user_profiles up
                 left join profiles p on p.id = up.profile_id
                 group by up.user_id
             ) as pr using(id)
             where  (
-                {filters.get('profile') is None} or '{filters.get('profile', '')}' in (select unnest(pr.profiles))
-                
-            ) and (
+                {filters.get('profile') is None} or '{filters.get('profile', '')}' in (select unnest(pr.profiles))            ) and (
                 {filters.get('id') is None} or u.id = {filters.get('id', 0)}
             )and (
                 {filters.get('email') is None} or u.email like '%{filters.get('email', '')}%'
@@ -69,9 +63,5 @@ class UsersRepository(BaseRepository):
             limit {page_size}
             offset {(page - 1) * page_size}
             '''
-        try:
-
-            users = session.execute(query)
-        except Exception as error:
-            print(error)
+        users = session.execute(query)
         return self.format_search_query(users)

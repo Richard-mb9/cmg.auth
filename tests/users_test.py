@@ -1,10 +1,9 @@
 from http import HTTPStatus
 from json import dumps, loads
-from urllib import response
 
 from .fixtures.app import Client
 from src.infra.repositories.users_repository import UsersRepository
-from src.infra.repositories.profiles_repository import Profiles, ProfilesRepository
+from src.infra.repositories.profiles_repository import ProfilesRepository
 
 
 def test_get_ping_users_api(client: Client):
@@ -80,7 +79,7 @@ def test_update_user(client: Client):
     assert response.status_code == HTTPStatus.NO_CONTENT
 
     user = UsersRepository().read_by_id(user_id)
-    assert user.enable == False
+    assert user.enable is False
 
 
 def test_update_user_profiles(client: Client, users, profiles):
@@ -95,7 +94,6 @@ def test_update_user_profiles(client: Client, users, profiles):
     response = client.put(f'users/{user.id}/profiles', data=data)
 
     user = UsersRepository().read_by_id(user.id)
-    user_profiles = user.profiles
 
     found_profile_1 = False
     found_profile_2 = False
@@ -109,8 +107,8 @@ def test_update_user_profiles(client: Client, users, profiles):
         elif profile.id == profile2.id:
             found_profile_2 = True
 
-    assert found_profile_1 == True
-    assert found_profile_2 == True
+    assert found_profile_1 is True
+    assert found_profile_2 is True
 
 
 def test_filter_user_by_id(client: Client):
@@ -146,12 +144,12 @@ def test_filter_user_by_profile(client: Client, profiles):
     response = client.profile(['ADMIN']).post('/users', data=data)
     user_id_3 = response.json['id']
 
-    response = client.get(f'/users?profile=ADMIN')
+    response = client.get('/users?profile=ADMIN')
 
     assert len(response.json) == 1
     assert response.json[0]['id'] == user_id_3
 
-    response = client.get(f'/users?profile=USER')
+    response = client.get('/users?profile=USER')
 
     ids = []
     for user in response.json:

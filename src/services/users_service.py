@@ -19,7 +19,7 @@ class UserService:
         self.__validate_no_default_user(user_data)
         if self.__user_already_exists(user_data['email']):
             ConflictError('There is already a user with this registered email')
-        user_data = self.encode_password(user_data)
+        user_data['password'] = self.encode_password(user_data['password'])
         profiles = ProfilesRepository().list_by_name_in(user_data['profiles'])
         user = Users(
             email=user_data['email'],
@@ -41,16 +41,14 @@ class UserService:
                     and not has_profile("ADMIN", "BACKOFFICE", "STORE"):
                 raise AccessDeniedError("you are not allowed to create this type of user")
 
-    def encode_password(self, user_data):
-        password = user_data['password']
-        user_data['password'] = self.__encode_md5(password)
-        return user_data
+    def encode_password(self, password: str):
+        return md5(password.encode("utf-8")).hexdigest()
 
     def update_password(self, id, data):
         user: Users = self.read_by_id(id)
         if not self.__check_password(data['old_password'], user):
             raise BadRequestError('old password incorrect')
-        self.repository.update_password(user, self.__encode_md5(data['new_password']))
+        self.repository.update_password(user, self.encode_password(data['new_password']))
         return Response(status=HTTPStatus.NO_CONTENT)
 
     def read_by_id(self, id):
@@ -63,21 +61,16 @@ class UserService:
         return self.repository.list_users(filters)
 
     def update(self, user_id, data_to_update: dict):
-        enable = data_to_update.get('enable')
-        if enable is not None:
-            self.repository.update(user_id, {'enable': enable})
+        self.repository.update(user_id, data_to_update)
 
     def update_user_profiles(self, user_id, profiles: dict):
         self.repository.update_profiles(user_id, profiles['profiles'])
 
-    def read_by_email_and_password(self, email, password) -> Users:
-        return self.repository.read_by_email_and_password(email, self.__encode_md5(password))
-
-    def __encode_md5(self, data: str):
-        return md5(data.encode("utf-8")).hexdigest()
+    def read_by_email(self, email) -> Users:
+        return self.repository.read_by_email(email)
 
     def __user_already_exists(self, email):
-        return len(self.repository.read_by_email(email)) > 0
+        return self.repository.read_by_email(email) is not None
 
     def __check_password(self, password, user: Users):
-        return user.password == self.__encode_md5(password)
+        return user.password == self.encode_password(password)

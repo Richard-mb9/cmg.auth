@@ -80,3 +80,11 @@ def app_context(app):
 def client(app):
     """A test client for the app."""
     return Client(app)
+
+
+@pytest.fixture(scope='session', autouse=True)
+def load_env():
+    """A test client for the app."""
+    import os
+    os.environ['testing'] = 'true'
+    yield

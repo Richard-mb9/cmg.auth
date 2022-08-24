@@ -1,11 +1,7 @@
-from typing import List
+from typing import List, TypedDict
 
 
-class ListUsersResponse(object):
-    def __init__(self, object):
-        for key in object:
-            setattr(self, key, object[key])
-    
+class ListUsersResponse(TypedDict):
     id: int
     email: str
     enable: bool

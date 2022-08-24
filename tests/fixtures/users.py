@@ -18,8 +18,8 @@ def users(profiles):
         repository.create(user)
         list_users.append(user) """
     for email in list:
-        user_data = {'email': email, 'password': '123456', 'profiles': ['USER']}
-        user_data = UserService().encode_password(user_data)
+        password = UserService().encode_password('123456')
+        user_data = {'email': email, 'password': password, 'profiles': ['USER']}
         list_profiles = session.query(Profiles).where(Profiles.name.in_(user_data['profiles'])).all()
         user = Users(
             email=user_data['email'],

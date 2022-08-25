@@ -8,6 +8,12 @@ insert_profile_validator = {
     }
 }
 
+filter_profile_validator = {
+    'name': {
+        'type': 'string'
+    },
+}
+
 update_profile_validator = {
     'name': {
         'type': 'string'

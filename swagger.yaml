@@ -201,6 +201,13 @@ paths:
       tags:
         - "Perfis de usuarios"
       summary: "Listar os perfis cadastrados"
+      parameters:
+        - in: query
+          name: name
+          schema:
+            type: string
+          description: nome do perfil que sera filtrado
+          example: ADMIN
       responses:
         200:
           description: "Listagem realizada com sucesso"
@@ -210,6 +217,10 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/profiles"
+        400:
+          description: "foi enviado algum filtro invalido"
+        403:
+          description: "usuario não tem permissão para listar perfis"
     post:
       tags:
         - "Perfis de usuarios"
@@ -226,6 +237,10 @@ paths:
                   type: string
                   example: "perfil de exemplo"
                   description: "Nome do perfil que sera criado"
+                role_name:
+                  type: string
+                  example: CREATE_USER_WITH_PROFILE_TESTS
+                  descritpion: caso seja necesserio permissões para criar usuarios com o perfil que esta endo criado, devera ser enviada o nome da nova permissão
       responses:
         201:
           description: "Perfil criado com sucesso"
@@ -327,6 +342,13 @@ paths:
       tags:
         - "Permissões"
       summary: "Lista as permissões cadastradas"
+      parameters:
+        - in: query
+          name: name
+          schema:
+            type: string
+          description: nome da permissao que sera filtrada
+          example: READ_USERS
       responses:
         200:
           description: "Listagem realizada com sucesso"
@@ -336,6 +358,10 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/roles"
+        400:
+          description: "foi enviado algum filtro invalido"
+        403:
+          description: "usuario não tem permissão para listar permissões"
     post:
       tags:
         - "Permissões"

@@ -1,8 +1,6 @@
 from http import HTTPStatus
 from json import dumps, loads
 
-from src.infra.repositories.profiles_repository import ProfilesRepository
-
 from .fixtures.app import Client
 
 
@@ -25,10 +23,19 @@ def test_fail_create_two_equal_rules(client: Client):
     assert response.status_code == HTTPStatus.CONFLICT
 
 
-def test_list_roles(client: Client, roles):
+def test_fail_list_roles_with_invalid_filters(client: Client):
+    response = client.get('/roles?invalid=invalid')
+    assert response.status_code == HTTPStatus.BAD_REQUEST
+
+
+def test_list_all_roles(client: Client, roles):
     response = client.get('/roles')
-    data = loads(response.data)
-    assert len(data) > 0
+    assert len(response.json) > 1
+
+
+def test_list_roles_with_filters(client: Client, roles):
+    response = client.get('/roles?name=READ_USERS')
+    assert len(response.json) == 1
 
 
 def test_update_role(client: Client, roles):
@@ -48,7 +55,7 @@ def test_update_role(client: Client, roles):
             assert role['name'] == new_name
             found_role = True
 
-    assert found_role == True
+    assert found_role is True
 
 
 def test_fail_update_two_equal_rules(client: Client):

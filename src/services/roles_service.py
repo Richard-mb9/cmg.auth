@@ -1,7 +1,6 @@
 from src.utils.errors import ConflictError, NotFoundError
 from src.domain.roles import Roles
 from src.domain.profiles import Profiles
-from src.utils.handlers import object_as_dict
 from .profiles_service import ProfilesService
 from src.infra.repositories.roles_repository import RolesRepository
 from src.infra.repositories.profiles_repository import ProfilesRepository
@@ -32,9 +31,8 @@ class RolesService:
         self.read_by_id(id)
         self.repository.delete(id)
 
-    def list(self):
-        roles = self.repository.list()
-        return object_as_dict(roles)
+    def list(self, filters: dict = {}):
+        return self.repository.list_roles(filters)
 
     def read_by_id(self, id) -> Roles:
         role = self.repository.read_by_id(id)

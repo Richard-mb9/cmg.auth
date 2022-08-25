@@ -26,9 +26,8 @@ class ProfilesService:
         self.repository.create(profile)
         return {'id': profile.id}
 
-    def list(self):
-        profiles = self.repository.list()
-        return object_as_dict(profiles)
+    def list(self, filters: dict = {}):
+        return self.repository.list_profiles(filters)
 
     def __profile_already_exists(self, name):
         profile = self.read_by_name(name)

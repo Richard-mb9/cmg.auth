@@ -7,8 +7,10 @@ from flask import jsonify
 from src.services.profiles_service import ProfilesService
 from src.security.security import roles_allowed
 from src.utils.validator import validator
+from src.utils.handlers import get_items_to_querys_from_request
 from .validator import insert_profile_validator
 from .validator import update_profile_validator
+from .validator import filter_profile_validator
 
 service = ProfilesService()
 
@@ -31,7 +33,9 @@ def create_profile():
 @app.route('', methods=['GET'])
 @roles_allowed('READ_PROFILES')
 def list_profiles():
-    return jsonify(service.list())
+    filters = get_items_to_querys_from_request()
+    validator(filter_profile_validator, filters)
+    return jsonify(service.list(filters))
 
 
 @app.route('/<profile_id>/roles', methods=['GET'])

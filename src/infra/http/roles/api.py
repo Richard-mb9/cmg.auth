@@ -7,8 +7,10 @@ from flask import jsonify
 from src.security.security import roles_allowed
 from src.services.roles_service import RolesService
 from src.utils.validator import validator
+from src.utils.handlers import get_items_to_querys_from_request
 from .validator import insert_rule_validator
 from .validator import update_rule_validator
+from .validator import filter_roles_validator
 
 service = RolesService()
 
@@ -31,7 +33,9 @@ def create_rule():
 @app.route('', methods=['GET'])
 @roles_allowed('READ_ROLES', 'CREATE_ROLES')
 def list_roles():
-    return jsonify(service.list())
+    filters = get_items_to_querys_from_request()
+    validator(filter_roles_validator, filters)
+    return jsonify(service.list(filters))
 
 
 @app.route('/<rule_id>', methods=['PUT'])

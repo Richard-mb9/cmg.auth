@@ -3,12 +3,12 @@ from src.domain.roles import Roles
 from src.infra.repositories.roles_repository import RolesRepository
 from src.utils.enums.roles import RolesEnum
 
-roles_admin = [profile.value for profile in RolesEnum]
+roles_admin = [role.value for role in RolesEnum]
 
 
 @pytest.fixture(scope='function')
 def roles():
-    list = ['role1', 'role2', 'role3', 'role4']
+    list = roles_admin
     list_roles = []
     repository = RolesRepository()
     for name in list:

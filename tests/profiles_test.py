@@ -26,10 +26,19 @@ def test_fail_create_two_equal_profiles(client: Client):
     assert response.status_code == HTTPStatus.CONFLICT
 
 
-def test_list_profiles(client: Client, profiles):
+def test_list_all_profiles(client: Client, profiles):
     response = client.get('/profiles')
-    data = loads(response.data)
-    assert len(data) > 0
+    assert len(response.json) > 1
+
+
+def test_fail_list_profiles_with_invalid_filters(client: Client):
+    response = client.get('/profiles?invalid=invalid')
+    assert response.status_code == HTTPStatus.BAD_REQUEST
+
+
+def test_list_with_filter(client: Client, profiles):
+    response = client.get('/profiles?name=ADMIN')
+    assert len(response.json) == 1
 
 
 def test_list_roles_from_profiles(client: Client, profiles, roles):

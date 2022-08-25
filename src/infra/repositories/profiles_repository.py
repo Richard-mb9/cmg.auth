@@ -4,6 +4,7 @@ from src.infra.repositories.base_repository import BaseRepository
 from src.config import get_session
 from src.domain.profiles import Profiles
 from src.domain.roles import Roles
+from src.infra.repositories.schemas.list_profiles_response import ListProfileResponse
 
 
 class ProfilesRepository(BaseRepository):
@@ -28,3 +29,9 @@ class ProfilesRepository(BaseRepository):
     def list_by_name_in(self, names: List[str]) -> List[Profiles]:
         session = get_session()
         return session.query(self.entity).where(self.entity.name.in_(names)).all()
+
+    def list_profiles(self, filters: dict = {}) -> List[ListProfileResponse]:
+        query = f"select * from profiles where name like '%{filters.get('name', '')}%'"
+        session = get_session()
+        profiles = session.execute(query)
+        return self.format_search_query(profiles)

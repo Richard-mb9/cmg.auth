@@ -1,0 +1,6 @@
+[run]
+omit = 
+    src/utils/errors.py
+    alembic/env.py
+    src/config.py
+    tests/*

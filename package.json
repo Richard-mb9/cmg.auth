@@ -11,7 +11,9 @@
     "redoc": "redoc-cli bundle swagger.yaml",
     "build-postgres": "cd tests/db && docker-compose up -d",
     "makemigrations": "alembic revision --autogenerate",
-    "update-database": "alembic upgrade head"
+    "update-database:local": "env ENVIRONMENT=local alembic upgrade head",
+    "update-database": "alembic upgrade head & python create_default_data.py",
+    "create-default-data:local": "env ENVIRONMENT=local python create_default_data.py"
   },
   "keywords": [],
   "author": "",

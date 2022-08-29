@@ -9,3 +9,4 @@ package-lock.json
 redoc-static.html
 .coverage
 /htmlcov
+create_default_data.py

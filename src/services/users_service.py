@@ -33,17 +33,6 @@ class UserService:
         self.repository.create(user)
         return {'id': user.id}
 
-    """ def __validate_no_default_user(self, user_data):
-        profiles = user_data['profiles']
-        for profile in profiles:
-            if profile not in ['STORE', 'USER'] and not is_authenticated():
-                raise AccessDeniedError("you are not allowed to create this type of user")
-            if profile in ["ADMIN", "BACKOFFICE"] and not has_profile('ADMIN'):
-                raise AccessDeniedError("you are not allowed to create this type of user")
-            if profile in ["MANAGER", "TABLE", "WAITER", "KITCHEN", "CASH_OPERATOR"] \
-                    and not has_profile("ADMIN", "BACKOFFICE", "STORE"):
-                raise AccessDeniedError("you are not allowed to create this type of user") """
-
     def __validate_roles(self, user_data: CreateUserRequest):
         profiles = user_data['profiles']
         for profile in profiles:

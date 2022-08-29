@@ -7,15 +7,19 @@ from distutils.util import strtobool
 from dotenv import load_dotenv, find_dotenv
 
 
+ENVIRONMENT = config('ENVIRONMENT', default=None)
+
+
 def is_testing():
-    return bool(strtobool(config('testing', default='False')))
+    testing = bool(strtobool(config('testing', default='False')))
+    return ENVIRONMENT is None or testing
 
 
 def get_db_url():
     if is_testing():
         env = find_dotenv('.env.test')
         load_dotenv(env)
-    else:
+    elif ENVIRONMENT == 'local':
         env = find_dotenv('.env.local')
         load_dotenv(env)
     host_db = config('HOST_DB', default=None)
@@ -28,7 +32,6 @@ def get_db_url():
 
 def get_engine():
     url_db = get_db_url()
-    print(url_db)
     return create_engine(url_db)
 
 

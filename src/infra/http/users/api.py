@@ -23,8 +23,6 @@ app = Blueprint('users', __name__)
 
 @app.route('/ping', methods=['GET'])
 def ping():
-    from src.config import is_testing
-    print(is_testing())
     return 'pong'
 
 

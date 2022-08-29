@@ -1,6 +1,3 @@
-from src.utils.enums.profiles import ProfilesEnum
-
-
 insert_user_validator = {
     'email': {
         'type': 'string',
@@ -59,8 +56,7 @@ update_user_profiles_validator = {
         'type': 'list',
         'schema': {
             'type': 'string',
-        },
-        'allowed': [profile.value for profile in ProfilesEnum]
+        }
     }
 }
 

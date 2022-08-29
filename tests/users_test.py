@@ -33,12 +33,11 @@ def test_fail_create_two_users_with_the_same_email(client: Client, profiles):
     assert response.status_code == HTTPStatus.CONFLICT
 
 
-def test_fail_create_without_role_for_create_profile(client: Client, profiles):
+def test_fail_create_user_without_role_for_create_profile(client: Client, profiles):
     data = dumps({'name': 'PROFILE', 'role_name': 'CREATE_USER_WITH_PROFILE'})
     client.post('/profiles', data=data)
     data = dumps({'email': 'teste@teste.com', 'password': '123456', 'profiles': ['PROFILE']})
-    client.roles('WITHOUT_ROLE').post('/users', data=data)
-    response = client.post('/users', data=data)
+    response = client.roles('WITHOUT_ROLE').post('/users', data=data)
     assert response.status_code == HTTPStatus.FORBIDDEN
 
 
@@ -103,8 +102,8 @@ def test_update_user_profiles(client: Client, users, profiles):
     profiles_in_db = ProfilesRepository().list()
 
     user = users_in_db[0]
-    profile1 = profiles_in_db[1]
-    profile2 = profiles_in_db[2]
+    profile1 = profiles_in_db[0]
+    profile2 = profiles_in_db[1]
 
     data = dumps({'profiles': [profile1.name, profile2.name]})
     response = client.put(f'users/{user.id}/profiles', data=data)

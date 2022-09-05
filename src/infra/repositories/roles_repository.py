@@ -13,7 +13,7 @@ class RolesRepository(BaseRepository):
         return session.query(self.entity).filter_by(name=name).all()
 
     def list_roles(self, filters: dict = {}) -> ListRolesResponse:
-        query = f"select * from roles where name like '%{filters.get('name', '')}%'"
+        query = f"select * from roles where upper(name) like '%{filters.get('name', '').upper()}%'"
         session = get_session()
         roles = session.execute(query)
         return self.format_search_query(roles)

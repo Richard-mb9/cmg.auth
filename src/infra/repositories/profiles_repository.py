@@ -31,7 +31,7 @@ class ProfilesRepository(BaseRepository):
         return session.query(self.entity).where(self.entity.name.in_(names)).all()
 
     def list_profiles(self, filters: dict = {}) -> List[ListProfileResponse]:
-        query = f"select * from profiles where name like '%{filters.get('name', '')}%'"
+        query = f"select * from profiles where upper(name) like '%{filters.get('name', '').upper()}%'"
         session = get_session()
         profiles = session.execute(query)
         return self.format_search_query(profiles)
